@@ -36,7 +36,7 @@ public class ClienteNovo extends JPanel {
 	public ClienteNovo() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
+				ColumnSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -50,10 +50,10 @@ public class ClienteNovo extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,},
+				ColumnSpec.decode("max(20dlu;default)"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -89,7 +89,7 @@ public class ClienteNovo extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,}));
+				RowSpec.decode("max(20dlu;default)"),}));
 		
 		JLabel lblTelefone = new JLabel("Telefone");
 		add(lblTelefone, "4, 4");

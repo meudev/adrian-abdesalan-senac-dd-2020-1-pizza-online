@@ -20,7 +20,7 @@ public class EntregaRegistrar extends JPanel {
 	public EntregaRegistrar() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
+				ColumnSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -32,20 +32,20 @@ public class EntregaRegistrar extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,},
+				ColumnSpec.decode("max(20dlu;default)"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(50dlu;default)"),}));
+				RowSpec.decode("max(20dlu;default)"),}));
 		
 		JLabel lblConfirmarRetirada = new JLabel("Confirmar Retirada / Entrega");
 		add(lblConfirmarRetirada, "6, 4");
