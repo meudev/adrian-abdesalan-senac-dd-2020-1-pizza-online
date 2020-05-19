@@ -10,15 +10,16 @@ import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Font;
 
 public class TelaInicial extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtLogin;
 	private JTextField txtSenha;
+
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -37,42 +38,40 @@ public class TelaInicial extends JFrame {
 	public TelaInicial() {
 		setTitle("Pizza Planet");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
-				FormSpecs.RELATED_GAP_COLSPEC, FormSpecs.DEFAULT_COLSPEC, FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC, FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("default:grow"),},
+				FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(20dlu;default):grow"),
+				FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,}));
+				FormSpecs.RELATED_GAP_ROWSPEC, RowSpec.decode("max(75dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC, RowSpec.decode("max(47dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,}));
 		
-		JLabel lbTitulo = new JLabel("PIZZA PLANET");
-		lbTitulo.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		getContentPane().add(lbTitulo, "6, 2");
+		JLabel lblTitulo = new JLabel("PIZZA PLANET");
+		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 60));
+		getContentPane().add(lblTitulo, "2, 2, 3, 1, center, bottom");
 		
-		JLabel lbLogin = new JLabel("Login:");
-		getContentPane().add(lbLogin, "4, 6, right, default");
+		JLabel lblLogin = new JLabel("Login: ");
+		getContentPane().add(lblLogin, "2, 6, right, default");
 		
 		txtLogin = new JTextField();
-		getContentPane().add(txtLogin, "6, 6, fill, default");
+		getContentPane().add(txtLogin, "4, 6, left, default");
 		txtLogin.setColumns(10);
 		
-		JLabel lbSenha = new JLabel("Senha:");
-		getContentPane().add(lbSenha, "4, 8, right, default");
+		JLabel lblSenha = new JLabel("Senha: ");
+		getContentPane().add(lblSenha, "2, 8, right, default");
 		
 		txtSenha = new JTextField();
-		getContentPane().add(txtSenha, "6, 8, fill, default");
+		getContentPane().add(txtSenha, "4, 8, left, default");
 		txtSenha.setColumns(10);
 		
-		JButton btnLogar = new JButton("Entrar");
-		btnLogar.addActionListener(new ActionListener() {
+		JButton btnEntrar = new JButton("Entrar");
+		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Entrar
+				//entrar
 			}
 		});
-		getContentPane().add(btnLogar, "6, 10");
-
+		getContentPane().add(btnEntrar, "4, 10, left, default");
 		
 	}
 	
