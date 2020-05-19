@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import java.awt.Font;
 
 public class ProdutoNovo extends JPanel {
 
@@ -35,21 +36,7 @@ public class ProdutoNovo extends JPanel {
 				ColumnSpec.decode("max(20dlu;default)"),},
 			new RowSpec[] {
 				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"),
-				FormSpecs.RELATED_GAP_ROWSPEC,
-				FormSpecs.DEFAULT_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
@@ -57,19 +44,37 @@ public class ProdutoNovo extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				FormSpecs.DEFAULT_ROWSPEC,
 				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(20dlu;default)"),}));
+		
+		JLabel lblProdutosNovo = new JLabel("Produtos > Novo Produto");
+		lblProdutosNovo.setFont(new Font("Tahoma", Font.BOLD, 14));
+		add(lblProdutosNovo, "4, 2, 9, 1");
 		
 		JLabel lblCategoria = new JLabel("Categoria");
 		add(lblCategoria, "4, 4, 7, 1");
 		
 		JComboBox cbCategoria = new JComboBox();
-		add(cbCategoria, "4, 6, 7, 1, fill, default");
+		add(cbCategoria, "4, 6, 7, 1, fill, fill");
 		
 		JLabel lblNomeAbreviadoapelido = new JLabel("Nome Abreviado (Apelido)");
 		add(lblNomeAbreviadoapelido, "4, 8, 7, 1");
 		
 		txtNomeProduto = new JTextField();
-		add(txtNomeProduto, "4, 10, 9, 1, fill, default");
+		add(txtNomeProduto, "4, 10, 9, 1, fill, fill");
 		txtNomeProduto.setColumns(10);
 		
 		JLabel lblDescrioDoProduto = new JLabel("Descri\u00E7\u00E3o do Produto (Informa\u00E7\u00E3o Para Tela de Venda");
@@ -82,11 +87,11 @@ public class ProdutoNovo extends JPanel {
 		add(lblValorVenda, "4, 16");
 		
 		txtValor = new JTextField();
-		add(txtValor, "4, 18, fill, default");
+		add(txtValor, "4, 18, fill, fill");
 		txtValor.setColumns(10);
 		
 		JButton btnCadastrarProduto = new JButton("Cadastrar Produto");
-		add(btnCadastrarProduto, "4, 22, 9, 1");
+		add(btnCadastrarProduto, "4, 22, 9, 1, default, fill");
 
 	}
 
