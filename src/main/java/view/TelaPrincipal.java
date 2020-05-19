@@ -1,7 +1,5 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -25,22 +23,10 @@ public class TelaPrincipal extends JFrame {
 	private ProdutoConsultar produtoConsultar;
 	private ConfiguracaoUsuarioNovo configuracaoUsuarioNovo;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TelaPrincipal frame = new TelaPrincipal();
-					frame.setExtendedState(MAXIMIZED_BOTH);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public TelaPrincipal() {
 		setTitle("Pizza Planet");
+		setExtendedState(MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -185,15 +171,16 @@ public class TelaPrincipal extends JFrame {
 		});
 		mnConfiguraes.add(mntmCadastrarUsurio);
 		
-		JMenu mnSair = new JMenu("Sair");
-		mnSair.addActionListener(new ActionListener() {
+		JMenuItem mntmSair = new JMenuItem("Sair");
+		mntmSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//SAIR
+				
+            	dispose();
+            	new TelaInicial().setVisible(true);
+            	
 			}
 		});
-		mnSair.setIcon(new ImageIcon("C:\\Users\\aferr\\git\\adrian-abdesalan-senac-dd-2020-1-pizza-online\\img\\icone_sair.png"));
-		mnSair.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		menuBar.add(mnSair);
+		mnConfiguraes.add(mntmSair);
 
 	}
 

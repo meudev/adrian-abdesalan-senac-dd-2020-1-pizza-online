@@ -37,41 +37,76 @@ public class TelaInicial extends JFrame {
 	
 	public TelaInicial() {
 		setTitle("Pizza Planet");
+		setExtendedState(MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
-				FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("max(20dlu;default):grow"),
-				FormSpecs.RELATED_GAP_COLSPEC, ColumnSpec.decode("default:grow"),},
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(150dlu;default)"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("max(20dlu;default)"),},
 			new RowSpec[] {
-				FormSpecs.RELATED_GAP_ROWSPEC, RowSpec.decode("max(75dlu;default)"),
-				FormSpecs.RELATED_GAP_ROWSPEC, RowSpec.decode("max(47dlu;default)"),
-				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC, FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-				FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,}));
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(50dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),}));
 		
-		JLabel lblTitulo = new JLabel("PIZZA PLANET");
-		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 60));
-		getContentPane().add(lblTitulo, "2, 2, 3, 1, center, bottom");
+		JLabel lblPizzaPlanet = new JLabel("PIZZA PLANET");
+		lblPizzaPlanet.setFont(new Font("Tahoma", Font.PLAIN, 50));
+		getContentPane().add(lblPizzaPlanet, "4, 4, 5, 1, center, fill");
 		
-		JLabel lblLogin = new JLabel("Login: ");
-		getContentPane().add(lblLogin, "2, 6, right, default");
+		JLabel lblLogin = new JLabel("Login");
+		getContentPane().add(lblLogin, "6, 8");
 		
 		txtLogin = new JTextField();
-		getContentPane().add(txtLogin, "4, 6, left, default");
+		getContentPane().add(txtLogin, "6, 10, fill, fill");
 		txtLogin.setColumns(10);
 		
-		JLabel lblSenha = new JLabel("Senha: ");
-		getContentPane().add(lblSenha, "2, 8, right, default");
+		JLabel lblSenha = new JLabel("Senha");
+		getContentPane().add(lblSenha, "6, 12");
 		
 		txtSenha = new JTextField();
-		getContentPane().add(txtSenha, "4, 8, left, default");
+		getContentPane().add(txtSenha, "6, 14, fill, fill");
 		txtSenha.setColumns(10);
 		
 		JButton btnEntrar = new JButton("Entrar");
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//entrar
+				
+				//ENTRAR	
+            	dispose();
+            	new TelaPrincipal().setVisible(true);
+				
 			}
 		});
-		getContentPane().add(btnEntrar, "4, 10, left, default");
+		getContentPane().add(btnEntrar, "6, 18, default, fill");
+		
+		JLabel lblDesenvoldidoPorAdrian = new JLabel("Desenvolvido por ADRIAN SALOMON FERREIRA ABDESALAN");
+		lblDesenvoldidoPorAdrian.setFont(new Font("Tahoma", Font.BOLD, 10));
+		getContentPane().add(lblDesenvoldidoPorAdrian, "4, 22, 5, 1, right, fill");
 		
 	}
 	
