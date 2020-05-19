@@ -117,7 +117,12 @@ public class TelaPrincipal extends JFrame {
 
 		
 		JMenu mnEntrega = new JMenu("Entrega");
-		mnEntrega.addActionListener(new ActionListener() {
+		mnEntrega.setIcon(new ImageIcon("C:\\Users\\aferr\\git\\adrian-abdesalan-senac-dd-2020-1-pizza-online\\img\\icone_entrega.png"));
+		mnEntrega.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		menuBar.add(mnEntrega);
+		
+		JMenuItem mntmRegistrar = new JMenuItem("Registrar");
+		mntmRegistrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				entregaRegistrar = new EntregaRegistrar();
@@ -126,9 +131,7 @@ public class TelaPrincipal extends JFrame {
 				
 			}
 		});
-		mnEntrega.setIcon(new ImageIcon("C:\\Users\\aferr\\git\\adrian-abdesalan-senac-dd-2020-1-pizza-online\\img\\icone_entrega.png"));
-		mnEntrega.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		menuBar.add(mnEntrega);
+		mnEntrega.add(mntmRegistrar);
 		
 		JMenu mnProdutos = new JMenu("Produtos");
 		mnProdutos.setIcon(new ImageIcon("C:\\Users\\aferr\\git\\adrian-abdesalan-senac-dd-2020-1-pizza-online\\img\\icone_produto.png"));
