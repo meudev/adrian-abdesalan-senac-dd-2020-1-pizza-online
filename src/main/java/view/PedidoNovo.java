@@ -4,9 +4,16 @@ import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import controller.ClienteController;
+import controller.ProdutoController;
+import model.vo.CategoriaProdutoVO;
+import model.vo.ClienteVO;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,8 +22,12 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PedidoNovo extends JPanel {
+	
+	ClienteVO cliente;
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtDataPedido;
@@ -30,6 +41,12 @@ public class PedidoNovo extends JPanel {
 	private JTable tablePedido;
 	private JTextField txtValorEntrega;
 	private JTextField txtTotalPedido;
+	
+	String nome;
+	String endereco;
+	String numero;
+	String bairro;
+	String cidade;
 
 	public PedidoNovo() {
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -126,6 +143,37 @@ public class PedidoNovo extends JPanel {
 		txtTelefone.setColumns(10);
 		
 		JButton btnProcurarCliente = new JButton("Procurar Cliente");
+		btnProcurarCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//PROCURAR CLIENTE
+				ClienteController controllerCliente = new ClienteController();
+				
+				cliente = controllerCliente.buscarCliente(txtTelefone.getText());
+				
+				if(cliente == null) {
+					
+					txtNome.setText(null);
+					txtEndereco.setText(null);
+					txtNumero.setText(null);
+					txtBairro.setText(null);
+					txtCidade.setText(null);
+					
+					JOptionPane.showMessageDialog(null, "Telefone não cadastrado no sistema.");
+					
+				} else {
+					
+					txtNome.setText(cliente.getNome());
+					txtEndereco.setText(cliente.getLogradouro());
+					txtNumero.setText(cliente.getNumero());
+					txtBairro.setText(cliente.getBairro());
+					txtCidade.setText(cliente.getCidade());
+					
+				}
+				
+				
+			}
+		});
 		add(btnProcurarCliente, "8, 8, left, fill");
 		
 		JLabel lblNomeDoCliente = new JLabel("Nome do Cliente");

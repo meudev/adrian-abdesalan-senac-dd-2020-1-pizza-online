@@ -4,13 +4,26 @@ import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import controller.ClienteController;
+import controller.ProdutoController;
+import model.vo.CategoriaProdutoVO;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.awt.event.ActionEvent;
 
 public class ClienteNovo extends JPanel {
 
@@ -29,11 +42,17 @@ public class ClienteNovo extends JPanel {
 	private JLabel lblCidade;
 	private JTextField txtCidade;
 	private JLabel lblEstado;
-	private JComboBox cbEstado;
 	private JLabel lblObservaes;
 	private JTextArea txtObservacao;
 	private JButton btnSalvarCliente;
 	private JLabel lblClientesNovo;
+	private JButton btnBuscarCep;
+	private JTextField txtEstado;
+	
+	String logradouro;
+	String bairro;
+	String cidade;
+	String uf;
 
 	public ClienteNovo() {
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -118,6 +137,19 @@ public class ClienteNovo extends JPanel {
 		add(txtCep, "4, 18, fill, fill");
 		txtCep.setColumns(10);
 		
+		btnBuscarCep = new JButton("\u2315");
+		btnBuscarCep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//BUSCA CEP
+				buscarCep(txtCep.getText());
+				
+			}
+
+		});
+		btnBuscarCep.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		add(btnBuscarCep, "6, 18, left, fill");
+		
 		lblLogradouro = new JLabel("Logradouro");
 		add(lblLogradouro, "4, 20");
 		
@@ -129,6 +161,7 @@ public class ClienteNovo extends JPanel {
 		
 		txtLogradouro = new JTextField();
 		add(txtLogradouro, "4, 22, 3, 1, fill, fill");
+		txtLogradouro.setEditable(false);
 		txtLogradouro.setColumns(10);
 		
 		txtNumero = new JTextField();
@@ -150,14 +183,18 @@ public class ClienteNovo extends JPanel {
 		
 		txtBairro = new JTextField();
 		add(txtBairro, "4, 26, 3, 1, fill, fill");
+		txtBairro.setEditable(false);
 		txtBairro.setColumns(10);
 		
 		txtCidade = new JTextField();
 		add(txtCidade, "10, 26, fill, fill");
+		txtCidade.setEditable(false);
 		txtCidade.setColumns(10);
 		
-		cbEstado = new JComboBox();
-		add(cbEstado, "14, 26, fill, fill");
+		txtEstado = new JTextField();
+		add(txtEstado, "14, 26, fill, fill");
+		txtEstado.setEditable(false);
+		txtEstado.setColumns(10);
 		
 		lblObservaes = new JLabel("Observa\u00E7\u00F5es");
 		add(lblObservaes, "4, 30");
@@ -166,8 +203,56 @@ public class ClienteNovo extends JPanel {
 		add(txtObservacao, "4, 32, 11, 1, fill, fill");
 		
 		btnSalvarCliente = new JButton("Salvar Cliente");
+		btnSalvarCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//SALVAR DADOS
+				ClienteController controllerCliente = new ClienteController();
+				
+				String mensagem = controllerCliente.cadastrarNovoCliente(txtTelefone.getText(), txtNome.getText(), txtCep.getText(), txtLogradouro.getText(), txtNumero.getText(), txtComplemento.getText(), txtBairro.getText(), txtCidade.getText(), txtEstado.getText(), txtObservacao.getText() );
+
+				JOptionPane.showMessageDialog(null, mensagem);
+				
+			}
+		});
 		add(btnSalvarCliente, "4, 36, 11, 1, default, fill");
 
 	}
+	
+	public void buscarCep(String cep) {
+        String json;        
+
+        try {
+            URL url = new URL("http://viacep.com.br/ws/"+ cep +"/json");
+            URLConnection urlConnection = url.openConnection();
+            InputStream is = urlConnection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+            StringBuilder jsonSb = new StringBuilder();
+
+            br.lines().forEach(l -> jsonSb.append(l.trim()));
+            json = jsonSb.toString();
+            
+            json = json.replaceAll("[{},:]", "");
+            json = json.replaceAll("\"", "\n");                       
+            String array[] = new String[30];
+            array = json.split("\n");
+                             
+            logradouro = array[7];            
+            bairro = array[15];
+            cidade = array[19]; 
+            uf = array[23];
+            
+            txtLogradouro.setText(logradouro);
+            txtBairro.setText(bairro);
+            txtCidade.setText(cidade);
+            txtEstado.setText(uf);
+            
+        } catch (Exception e) {
+        	
+            throw new RuntimeException(e);
+            
+        }
+    }
 
 }
