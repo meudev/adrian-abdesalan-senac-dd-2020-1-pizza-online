@@ -6,9 +6,14 @@ import javax.swing.JFrame;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import controller.UsuarioController;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -18,7 +23,7 @@ public class TelaInicial extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtLogin;
-	private JTextField txtSenha;
+	private JPasswordField txtSenha;
 
 
 	public static void main(String[] args) {
@@ -88,7 +93,7 @@ public class TelaInicial extends JFrame {
 		JLabel lblSenha = new JLabel("Senha");
 		getContentPane().add(lblSenha, "6, 12");
 		
-		txtSenha = new JTextField();
+		txtSenha = new JPasswordField();
 		getContentPane().add(txtSenha, "6, 14, fill, fill");
 		txtSenha.setColumns(10);
 		
@@ -96,9 +101,26 @@ public class TelaInicial extends JFrame {
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				//ENTRAR	
-            	dispose();
-            	new TelaPrincipal().setVisible(true);
+				//CONECTAR
+				UsuarioController controllerUsuario = new UsuarioController();
+				
+				@SuppressWarnings("deprecation")
+				String mensagem = controllerUsuario.conectarUsuario(txtLogin.getText(), txtSenha.getText());
+				
+				if(mensagem.isEmpty()) {
+					
+					//ENTRAR	
+	            	dispose();
+	            	new TelaPrincipal().setVisible(true);
+	            	
+				} else {
+					
+					//ERRO
+					JOptionPane.showMessageDialog(null, mensagem);
+					
+				}
+				
+
 				
 			}
 		});

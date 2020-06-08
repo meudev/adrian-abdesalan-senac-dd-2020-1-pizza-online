@@ -116,10 +116,19 @@ public class ProdutoNovo extends JPanel {
 
 				JOptionPane.showMessageDialog(null, mensagem);
 				
+				limparCampos();
+				
 			}
+
 		});
 		add(btnCadastrarProduto, "4, 22, 9, 1, default, fill");
 
 	}
-
+	
+	private void limparCampos() {
+		txtNomeProduto.setText("");
+		txtDescricaoProduto.setText("");
+		txtValor.setText("");
+		txtQuantidade.setText("");
+	}
 }

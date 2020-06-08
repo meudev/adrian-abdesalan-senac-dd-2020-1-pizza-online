@@ -1,6 +1,9 @@
 package controller;
 
+import java.util.ArrayList;
+
 import model.bo.ProdutoBO;
+import model.dao.ProdutoDAO;
 import model.vo.CategoriaProdutoVO;
 import model.vo.ProdutoVO;
 
@@ -13,6 +16,7 @@ public class ProdutoController {
 	private static final int TAMANHO_MAXIMO_CAMPO_DESCRICAO= 250;
 	
 	private ProdutoBO produtoBO = new ProdutoBO();
+	private ProdutoDAO produtoDAO = new ProdutoDAO();
 
 	public String salvar(CategoriaProdutoVO categoria, String nomeProduto, String descricao, String valorTXT, String quantidadeTXT, String disponivelTXT) {
 		String mensagem = "";
@@ -61,6 +65,25 @@ public class ProdutoController {
 		int valorInteiro = Integer.parseInt(valorFormatado.replace(",", ""));
 		
 		return valorInteiro;
+	}
+
+	public ArrayList<ProdutoVO> listarProdutos(String busca) {
+		return produtoDAO.consultarPorSeletor(busca);
+	}
+
+	public String excluirProduto(int idSelecionado) {
+		String mensagem = "";
+		
+		try {
+			
+			mensagem = produtoBO.excluir(idSelecionado);
+			
+		} catch (NumberFormatException ex) {
+			
+			mensagem = "Selecione um produto.";
+		}
+		
+		return mensagem;
 	}
 	
 }

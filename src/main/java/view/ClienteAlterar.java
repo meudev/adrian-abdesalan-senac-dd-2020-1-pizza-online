@@ -23,7 +23,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.awt.event.ActionEvent;
 
-public class ClienteNovo extends JPanel {
+public class ClienteAlterar extends JPanel {
 	
 	ClienteVO cliente = new ClienteVO();
 
@@ -44,7 +44,7 @@ public class ClienteNovo extends JPanel {
 	private JLabel lblEstado;
 	private JLabel lblObservaes;
 	private JTextArea txtObservacao;
-	private JButton btnSalvarCliente;
+	private JButton btnSalvarAlteracao;
 	private JLabel lblClientesNovo;
 	private JButton btnBuscarCep;
 	private JTextField txtEstado;
@@ -54,7 +54,7 @@ public class ClienteNovo extends JPanel {
 	String cidade;
 	String uf;
 
-	public ClienteNovo() {
+	public ClienteAlterar() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(20dlu;default)"),
@@ -112,7 +112,9 @@ public class ClienteNovo extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(20dlu;default)"),}));
 		
-		lblClientesNovo = new JLabel("Clientes > Novo");
+		popularCampos(cliente);
+		
+		lblClientesNovo = new JLabel("Clientes > Alterar");
 		lblClientesNovo.setFont(new Font("Tahoma", Font.BOLD, 14));
 		add(lblClientesNovo, "4, 2, 11, 1");
 		
@@ -202,14 +204,14 @@ public class ClienteNovo extends JPanel {
 		txtObservacao = new JTextArea();
 		add(txtObservacao, "4, 32, 11, 1, fill, fill");
 		
-		btnSalvarCliente = new JButton("Salvar Cliente");
-		btnSalvarCliente.addActionListener(new ActionListener() {
+		btnSalvarAlteracao = new JButton("Salvar Altera\u00E7\u00F5es");
+		btnSalvarAlteracao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				//SALVAR DADOS
 				ClienteController controllerCliente = new ClienteController();
 				
-				String mensagem = controllerCliente.cadastrarNovoCliente(txtTelefone.getText(), txtNome.getText(), txtCep.getText(), txtLogradouro.getText(), txtNumero.getText(), txtComplemento.getText(), txtBairro.getText(), txtCidade.getText(), txtEstado.getText(), txtObservacao.getText() );
+				String mensagem = controllerCliente.cadastrarAlteracaoCliente(cliente.getId(), txtTelefone.getText(), txtNome.getText(), txtCep.getText(), txtLogradouro.getText(), txtNumero.getText(), txtComplemento.getText(), txtBairro.getText(), txtCidade.getText(), txtEstado.getText(), txtObservacao.getText() );
 
 				JOptionPane.showMessageDialog(null, mensagem);
 				
@@ -219,10 +221,22 @@ public class ClienteNovo extends JPanel {
 
 
 		});
-		add(btnSalvarCliente, "4, 36, 11, 1, default, fill");
+		add(btnSalvarAlteracao, "4, 36, 11, 1, default, fill");
 
 	}
 	
+	private void popularCampos(ClienteVO cliente2) {
+		txtTelefone.setText(cliente.getTelefone());
+		txtNome.setText(cliente.getNome());
+		txtCep.setText(Integer.toString(cliente.getCep()));
+		txtLogradouro.setText(cliente.getLogradouro());
+		txtNumero.setText(cliente.getNumero());
+		txtComplemento.setText(cliente.getComplemento());
+		txtBairro.setText(cliente.getBairro());
+		txtCidade.setText(cliente.getCidade());
+		txtObservacao.setText(cliente.getObservacao());
+	}
+
 	public void buscarCep(String cep) {
         String json;        
 

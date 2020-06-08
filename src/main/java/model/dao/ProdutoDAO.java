@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import model.vo.ProdutoVO;
 
@@ -39,6 +40,69 @@ public class ProdutoDAO {
 		}
 
 		return novoProduto;
+	}
+
+	public ArrayList<ProdutoVO> consultarPorSeletor(String busca) {
+		String likeBusca = "%"+ busca + "%";
+		Connection conexao = Banco.getConnection();
+		String sql = " SELECT * FROM produto WHERE nome like '"+ likeBusca + "' ";
+
+		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql);
+
+		ArrayList<ProdutoVO> produtos = new ArrayList<ProdutoVO>();
+		try {
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				ProdutoVO produto = construirProdutoDoResultSet(rs);
+				produtos.add(produto);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar clientes.");
+			System.out.println("Erro: " + e.getMessage());
+		}
+
+		return produtos;
+	}
+
+	private ProdutoVO construirProdutoDoResultSet(ResultSet rs) {
+		ProdutoVO p = new ProdutoVO();
+		
+		try {
+			p.setId(rs.getInt("id"));
+			//categoria
+//			p.setIdCategoria(rs.getInt("idCategoria"));
+			p.setNome(rs.getString("nome"));
+			p.setDescricao(rs.getString("descricao"));
+			p.setQuantidade(rs.getInt("quantidade"));
+			p.setValor(rs.getInt("valor"));
+			p.setDisponivel(rs.getBoolean("disponivel"));			
+
+		} catch (SQLException e) {
+			
+			System.out.println("Erro ao construir produto a partir do ResultSet. Causa: " + e.getMessage());
+			
+		}
+		
+		return p;
+	}
+
+	public boolean excluir(int idSelecionado) {
+		String sql = " DELETE FROM produto WHERE id = ?";
+
+		Connection conexao = Banco.getConnection();
+		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
+		boolean excluiu = false;
+		
+		try {
+			preparedStatement.setInt(1, idSelecionado);
+			int codigoRetornoUpdate = preparedStatement.executeUpdate();
+
+			excluiu = (codigoRetornoUpdate == Banco.CODIGO_RETORNO_SUCESSO_EXCLUSAO);
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao excluir produto. Id: " + idSelecionado + " .Causa: " + ex.getMessage());
+		}
+		return excluiu;
 	}
 
 }

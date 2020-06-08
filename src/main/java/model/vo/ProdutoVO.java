@@ -20,6 +20,9 @@ public class ProdutoVO {
 		this.disponivel = disponivel;
 	}
 
+	public ProdutoVO() {
+	}
+
 	public int getId() {
 		return id;
 	}

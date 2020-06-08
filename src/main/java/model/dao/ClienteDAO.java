@@ -135,6 +135,88 @@ public class ClienteDAO {
 		
 		return c;
 	}
+
+	public ArrayList<ClienteVO> consultarPorSeletor(String busca) {
+		String likeBusca = "%"+ busca + "%";
+		Connection conexao = Banco.getConnection();
+		String sql = " SELECT * FROM cliente WHERE nome like '"+ likeBusca + "' OR telefone like '"+ likeBusca + "' OR cep like '"+ likeBusca + "' or logradouro like '"+ likeBusca + "' ";
+
+		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql);
+
+		ArrayList<ClienteVO> clientes = new ArrayList<ClienteVO>();
+		try {
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				ClienteVO cliente = construirClienteDoResultSet(rs);
+				clientes.add(cliente);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar clientes.");
+			System.out.println("Erro: " + e.getMessage());
+		}
+
+		return clientes;
+	}
+
+	public boolean excluir(int idSelecionado) {
+		String sql = " DELETE FROM cliente WHERE id = ?";
+
+		Connection conexao = Banco.getConnection();
+		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
+		boolean excluiu = false;
+		
+		try {
+			preparedStatement.setInt(1, idSelecionado);
+			int codigoRetornoUpdate = preparedStatement.executeUpdate();
+
+			excluiu = (codigoRetornoUpdate == Banco.CODIGO_RETORNO_SUCESSO_EXCLUSAO);
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao excluir cliente. Id: " + idSelecionado + " .Causa: " + ex.getMessage());
+		}
+		return excluiu;
+	}
+
+	public boolean salvarAlteracao(ClienteVO alterarCliente) {
+		
+		boolean alterado = false;
+		int id = alterarCliente.getId();
+
+		String sql = "UPDATE cliente SET telefone = ?, nome = ?, cep = ?, logradouro = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, estado = ?, observacoes = ? WHERE id = "+ id;
+
+		Connection conexao = Banco.getConnection();
+		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql, PreparedStatement.RETURN_GENERATED_KEYS);
+		
+		try {
+			
+			stmt.setString(1, alterarCliente.getTelefone());
+			stmt.setString(2, alterarCliente.getNome());
+			stmt.setInt(3, alterarCliente.getCep());
+			stmt.setString(4, alterarCliente.getLogradouro());
+			stmt.setString(5, alterarCliente.getNumero());
+			stmt.setString(6, alterarCliente.getComplemento());
+			stmt.setString(7, alterarCliente.getBairro());
+			stmt.setString(8, alterarCliente.getCidade());
+			stmt.setString(9, alterarCliente.getEstado());
+			stmt.setString(10, alterarCliente.getObservacao());
+			stmt.execute();
+			
+			ResultSet resultado = stmt.getGeneratedKeys();
+
+			if (resultado.next()) {
+				
+				alterarCliente.setId(resultado.getInt(1));
+				alterado = true;
+			}
+			
+		} catch (SQLException e) {
+			
+			System.out.println(" Erro ao salvar alteração cliente. Causa: " + e.getMessage());
+			
+		}
+		
+		return alterado;
+	}
 	
 	
 }

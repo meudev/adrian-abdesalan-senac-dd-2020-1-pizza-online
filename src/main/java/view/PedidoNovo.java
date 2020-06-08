@@ -6,8 +6,6 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
 import controller.ClienteController;
-import controller.ProdutoController;
-import model.vo.CategoriaProdutoVO;
 import model.vo.ClienteVO;
 
 import com.jgoodies.forms.layout.FormSpecs;

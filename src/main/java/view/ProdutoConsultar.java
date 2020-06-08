@@ -4,12 +4,25 @@ import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import controller.ClienteController;
+import controller.ProdutoController;
+import model.vo.ClienteVO;
+import model.vo.ProdutoVO;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
 
 public class ProdutoConsultar extends JPanel {
 
@@ -17,6 +30,10 @@ public class ProdutoConsultar extends JPanel {
 	private JTextField textField;
 	private JTable table;
 	private JLabel lblProdutosConsultar;
+	private JButton btnEditarProduto;
+	private JButton btnExcluirProduto;
+	private ArrayList<ProdutoVO> produtos;
+	private String[] nomesColunas = { "NOME", "VALOR", "QUANTIDADE" };
 
 	public ProdutoConsultar() {
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -44,6 +61,8 @@ public class ProdutoConsultar extends JPanel {
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(20dlu;default)"),}));
 		
 		lblProdutosConsultar = new JLabel("Produtos > Consultar Produto");
@@ -58,11 +77,103 @@ public class ProdutoConsultar extends JPanel {
 		textField.setColumns(10);
 		
 		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				ProdutoController controller = new ProdutoController();
+				produtos = controller.listarProdutos(textField.getText());
+
+				atualizarTabelaProdutos();
+			}
+
+		});
 		add(btnBuscar, "8, 6, fill, fill");
 		
 		table = new JTable();
-		add(table, "4, 10, 7, 1, fill, fill");
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int indiceSelecionado = table.getSelectedRow();
 
+				if (indiceSelecionado > 0) {
+					btnEditarProduto.setEnabled(true);
+					btnExcluirProduto.setEnabled(true);
+				} else {
+					btnEditarProduto.setEnabled(false);
+					btnExcluirProduto.setEnabled(false);
+				}
+			}
+		});
+		add(table, "4, 10, 7, 1, fill, fill");
+		
+		btnEditarProduto = new JButton("Editar Produto");
+		btnEditarProduto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String mensagem = null;
+				
+				//EDITAR
+				
+				
+				iniciarTabelaProdutos();
+				
+				JOptionPane.showMessageDialog(null, mensagem);
+			}
+		});
+		add(btnEditarProduto, "4, 12, right, fill");
+		btnEditarProduto.setEnabled(false);
+		
+		btnExcluirProduto = new JButton("Excluir Produto");
+		btnExcluirProduto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String mensagem = null;
+			
+				//EXLCUIR
+				int linhaSelecionadaNaTabela = table.getSelectedRow();
+				ProdutoVO produtoSelecionado = produtos.get(linhaSelecionadaNaTabela - 1);
+								
+				ProdutoController controllerProduto = new ProdutoController();
+				mensagem = controllerProduto.excluirProduto(produtoSelecionado.getId());
+				
+				iniciarTabelaProdutos();
+				
+				JOptionPane.showMessageDialog(null, mensagem);
+			}
+		});
+		add(btnExcluirProduto, "10, 12, left, fill");
+		btnExcluirProduto.setEnabled(false);
+		
+		iniciarTabelaProdutos();
+
+	}
+	
+	private void iniciarTabelaProdutos() {
+		
+		ProdutoController controller = new ProdutoController();
+		produtos = controller.listarProdutos(textField.getText());
+
+		atualizarTabelaProdutos();
+		
+	}
+
+	private void atualizarTabelaProdutos() {
+		limparTabelaProdutos();
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+		for (ProdutoVO p : produtos) {
+
+			Object[] novaLinhaDaTabela = new Object[4];
+			novaLinhaDaTabela[0] = p.getNome();
+			novaLinhaDaTabela[1] = p.getValor();
+			novaLinhaDaTabela[2] = p.getQuantidade();
+
+			model.addRow(novaLinhaDaTabela);
+		}
+	}
+	
+	private void limparTabelaProdutos() {
+		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
 	}
 
 }

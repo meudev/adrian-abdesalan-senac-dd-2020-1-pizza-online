@@ -17,6 +17,7 @@ public class EntregaRegistrar extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtNumeroPedido;
 	private JTable table;
+	private JComboBox cbStatusEntrega;
 
 	public EntregaRegistrar() {
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -59,7 +60,7 @@ public class EntregaRegistrar extends JPanel {
 		add(txtNumeroPedido, "6, 6, fill, fill");
 		txtNumeroPedido.setColumns(10);
 		
-		JComboBox cbStatusEntrega = new JComboBox();
+		cbStatusEntrega = new JComboBox();
 		add(cbStatusEntrega, "8, 6, fill, fill");
 		
 		JButton btnConfirmar = new JButton("Confirmar");
