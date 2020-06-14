@@ -1,25 +1,44 @@
 package view;
 
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import controller.UsuarioController;
+import model.vo.UsuarioVO;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.util.ArrayList;
+
 import javax.swing.JSeparator;
+import java.awt.event.ActionListener;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.awt.event.ActionEvent;
 
 public class ConfiguracaoUsuarioNovo extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtLogin;
-	private JTextField txtSenha;
+	private JPasswordField txtSenha;
 	private JTextField txtEmail;
 	private JTextField txtNome;
+	private JButton btnCadastrar;
 	private JTable tableUsuarios;
+	
+	private ArrayList<UsuarioVO> usuarios;
+	private String[] nomesColunas = { "USUARIO", "EMAIL", "LOGIN" };
 
 	public ConfiguracaoUsuarioNovo() {
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -95,11 +114,32 @@ public class ConfiguracaoUsuarioNovo extends JPanel {
 		JLabel lblSenha = new JLabel("Senha");
 		add(lblSenha, "6, 16");
 		
-		txtSenha = new JTextField();
+		txtSenha = new JPasswordField();
 		add(txtSenha, "6, 18, fill, fill");
 		txtSenha.setColumns(10);
 		
-		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
+			public void actionPerformed(ActionEvent e) {
+				
+				//CADASTRAR NOVO USUARIO
+				String txtSenhaTratada = md5(txtSenha.getText());
+				
+				UsuarioController controllerUsuario = new UsuarioController();
+				
+				String mensagem = controllerUsuario.cadastrarUsuario(txtNome.getText(), txtEmail.getText(), txtLogin.getText(), txtSenhaTratada);
+
+				iniciarTabelaUsuarios();
+				
+				JOptionPane.showMessageDialog(null, mensagem);
+				
+				limparCampos();
+				
+				
+			}
+
+		});
 		add(btnCadastrar, "6, 22, default, fill");
 		
 		JSeparator separator = new JSeparator();
@@ -111,6 +151,63 @@ public class ConfiguracaoUsuarioNovo extends JPanel {
 		tableUsuarios = new JTable();
 		add(tableUsuarios, "6, 30, fill, fill");
 
+		iniciarTabelaUsuarios();
+		
+	}
+	
+	private void iniciarTabelaUsuarios() {
+		
+		UsuarioController controller = new UsuarioController();
+		usuarios = controller.listarUsusarios("");
+
+		atualizarTabelaUsuario();
+		
+	}
+
+	private void atualizarTabelaUsuario() {
+		limparTabelaUsuario();
+		DefaultTableModel model = (DefaultTableModel) tableUsuarios.getModel();
+
+		for (UsuarioVO u : usuarios) {
+
+			Object[] novaLinhaDaTabela = new Object[3];
+			novaLinhaDaTabela[0] = u.getNome();
+			novaLinhaDaTabela[1] = u.getEmail();
+			novaLinhaDaTabela[2] = u.getLogin();
+					
+			model.addRow(novaLinhaDaTabela);
+		}
+	}
+	
+	private void limparTabelaUsuario() {
+		tableUsuarios.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
+	}
+	
+	private void limparCampos() {
+		txtNome.setText("");
+		txtEmail.setText("");
+		txtLogin.setText("");
+		txtSenha.setText("");
+		
+	}
+	
+	public static String md5(String valor) {
+	     
+	    String md5 = null;
+	     
+	    if(null == valor) return null;
+	     
+	    try {
+	         
+	    MessageDigest digest = MessageDigest.getInstance("MD5");   
+	    digest.update(valor.getBytes(), 0, valor.length());
+	    md5 = new BigInteger(1, digest.digest()).toString(16);
+
+	    } catch (NoSuchAlgorithmException e) {
+
+	        e.printStackTrace();
+	    }
+	    return md5;
 	}
 
 }

@@ -105,4 +105,24 @@ public class ProdutoDAO {
 		return excluiu;
 	}
 
+	public ProdutoVO consultarProdutoPorId(int id) {
+		String sql = " SELECT * FROM produto WHERE id = ?";
+
+		Connection conexao = Banco.getConnection();
+		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
+		ProdutoVO produtoConsultado = null;
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet conjuntoResultante = preparedStatement.executeQuery();
+
+			if (conjuntoResultante.next()) {
+				produtoConsultado = construirProdutoDoResultSet(conjuntoResultante);
+			}
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao consultar produto. Id: " + id + " .Causa: " + ex.getMessage());
+		}
+		return produtoConsultado;
+	}
+
+
 }

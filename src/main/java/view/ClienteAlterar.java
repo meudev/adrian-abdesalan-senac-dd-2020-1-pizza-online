@@ -54,7 +54,7 @@ public class ClienteAlterar extends JPanel {
 	String cidade;
 	String uf;
 
-	public ClienteAlterar() {
+	public ClienteAlterar(ClienteVO clienteSelecionado) {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(20dlu;default)"),
@@ -111,9 +111,7 @@ public class ClienteAlterar extends JPanel {
 				RowSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("max(20dlu;default)"),}));
-		
-		popularCampos(cliente);
-		
+			
 		lblClientesNovo = new JLabel("Clientes > Alterar");
 		lblClientesNovo.setFont(new Font("Tahoma", Font.BOLD, 14));
 		add(lblClientesNovo, "4, 2, 11, 1");
@@ -215,26 +213,30 @@ public class ClienteAlterar extends JPanel {
 
 				JOptionPane.showMessageDialog(null, mensagem);
 				
-				limparCampos();
+				
+				//MANDAR PARA TELA DE BUSCA DE CLIENTES
+				
 				
 			}
 
 
 		});
 		add(btnSalvarAlteracao, "4, 36, 11, 1, default, fill");
+		
+		popularCampos(clienteSelecionado);
 
 	}
 	
-	private void popularCampos(ClienteVO cliente2) {
-		txtTelefone.setText(cliente.getTelefone());
-		txtNome.setText(cliente.getNome());
-		txtCep.setText(Integer.toString(cliente.getCep()));
-		txtLogradouro.setText(cliente.getLogradouro());
-		txtNumero.setText(cliente.getNumero());
-		txtComplemento.setText(cliente.getComplemento());
-		txtBairro.setText(cliente.getBairro());
-		txtCidade.setText(cliente.getCidade());
-		txtObservacao.setText(cliente.getObservacao());
+	private void popularCampos(ClienteVO clienteSelecionado) {
+		txtTelefone.setText(clienteSelecionado.getTelefone());
+		txtNome.setText(clienteSelecionado.getNome());
+		txtCep.setText(Integer.toString(clienteSelecionado.getCep()));
+		txtLogradouro.setText(clienteSelecionado.getLogradouro());
+		txtNumero.setText(clienteSelecionado.getNumero());
+		txtComplemento.setText(clienteSelecionado.getComplemento());
+		txtBairro.setText(clienteSelecionado.getBairro());
+		txtCidade.setText(clienteSelecionado.getCidade());
+		txtObservacao.setText(clienteSelecionado.getObservacao());
 	}
 
 	public void buscarCep(String cep) {
@@ -272,18 +274,5 @@ public class ClienteAlterar extends JPanel {
             
         }
     }
-	
-	private void limparCampos() {
-		txtTelefone.setText("");
-		txtNome.setText("");
-		txtCep.setText("");
-		txtLogradouro.setText("");
-		txtNumero.setText("");
-		txtComplemento.setText("");
-		txtBairro.setText("");
-		txtCidade.setText("");
-		txtObservacao.setText("");
-		txtEstado.setText("");
-	}
 
 }

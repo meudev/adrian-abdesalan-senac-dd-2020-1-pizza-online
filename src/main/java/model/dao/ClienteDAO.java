@@ -217,6 +217,25 @@ public class ClienteDAO {
 		
 		return alterado;
 	}
+
+	public ClienteVO consultarClientePorId(int id) {
+		String sql = " SELECT * FROM cliente WHERE id = ?";
+
+		Connection conexao = Banco.getConnection();
+		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
+		ClienteVO clienteConsultado = null;
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet conjuntoResultante = preparedStatement.executeQuery();
+
+			if (conjuntoResultante.next()) {
+				clienteConsultado = construirClienteDoResultSet(conjuntoResultante);
+			}
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao consultar cliente. Id: " + id + " .Causa: " + ex.getMessage());
+		}
+		return clienteConsultado;
+	}
 	
 	
 }

@@ -7,6 +7,10 @@ import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.JMenuItem;
 
+import model.vo.ClienteVO;
+import model.vo.PedidoVO;
+import model.vo.ProdutoVO;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -15,12 +19,16 @@ public class TelaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private ClienteNovo clienteNovo;
 	private ClienteConsultar clienteConsultar;
+	private ClienteAlterar clienteAlterar;
 	private CozinhaListar cozinhaListar;
+	private CozinhaVisualizar cozinhaVisualizar;
 	private EntregaRegistrar entregaRegistrar;
 	private PedidoNovo pedidoNovo;
 	private PedidoConsultar pedidoConsultar;
 	private ProdutoNovo produtoNovo;
 	private ProdutoConsultar produtoConsultar;
+	private ProdutoCategoria produtoCategoria;
+	private ProdutoAlterar produtoAlterar;
 	private ConfiguracaoUsuarioNovo configuracaoUsuarioNovo;
 
 
@@ -154,6 +162,18 @@ public class TelaPrincipal extends JFrame {
 		});
 		mnProdutos.add(mntmConsultarProduto);
 		
+		JMenuItem mntmCadastrarCategoria = new JMenuItem("Cadastrar Categoria");
+		mntmCadastrarCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				produtoCategoria = new ProdutoCategoria();
+				setContentPane(produtoCategoria);
+				revalidate();
+				
+			}
+		});
+		mnProdutos.add(mntmCadastrarCategoria);
+		
 		JMenu mnConfiguraes = new JMenu("Configura\u00E7\u00F5es");
 		mnConfiguraes.setIcon(new ImageIcon("C:\\Users\\aferr\\git\\adrian-abdesalan-senac-dd-2020-1-pizza-online\\img\\icone_configuracoes.png"));
 		mnConfiguraes.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -184,4 +204,47 @@ public class TelaPrincipal extends JFrame {
 
 	}
 
+
+	public void abrirClienteAlterar(ClienteVO clienteSelecionado) {
+		
+		clienteAlterar = new ClienteAlterar(clienteSelecionado);
+		getContentPane().add(clienteAlterar);
+		setVisible(true);
+		revalidate();
+		
+	}
+
+
+	public void abrirProdutoAlterar(ProdutoVO produtoSelecionado) {
+		
+		produtoAlterar = new ProdutoAlterar(produtoSelecionado);
+		getContentPane().add(produtoAlterar);
+		setVisible(true);
+		revalidate();
+			
+	}
+
+
+	public void abrirCozinhaVisualizar(PedidoVO pedidoSelecionado) {
+		
+		cozinhaVisualizar = new CozinhaVisualizar(pedidoSelecionado);
+		getContentPane().add(cozinhaVisualizar);
+		setVisible(true);
+		revalidate();
+				
+	}
+
+
+	public void abrirCozinhaListar() {
+		
+		cozinhaListar = new CozinhaListar();
+		getContentPane().add(cozinhaListar);
+		setVisible(true);
+		revalidate();
+		
+	}
+
+
+
+	
 }

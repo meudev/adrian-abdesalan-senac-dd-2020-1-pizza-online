@@ -29,7 +29,7 @@ public class CategoriaProdutoDAO {
 		return categorias;
 	}
 
-	private CategoriaProdutoVO construirCategoriaProdutoDoResultSet(ResultSet conjuntoResultante) {
+	private static CategoriaProdutoVO construirCategoriaProdutoDoResultSet(ResultSet conjuntoResultante) {
 		CategoriaProdutoVO e = new CategoriaProdutoVO();
 		try {
 			e.setId(conjuntoResultante.getInt("id"));
@@ -38,6 +38,55 @@ public class CategoriaProdutoDAO {
 			System.out.println(" Erro ao construir categoria produto a partir do ResultSet. Causa: " + ex.getMessage());
 		}
 		return e;
+	}
+
+	public CategoriaProdutoVO cadastrarCategoria(CategoriaProdutoVO novaCategoria) {
+		Connection conexao = Banco.getConnection();
+
+		String sql = " INSERT INTO categoriaProduto (descricao) " + " VALUES (?)";
+
+		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql, PreparedStatement.RETURN_GENERATED_KEYS);
+		
+		try {
+			
+			stmt.setString(1, novaCategoria.getDescricao());
+			stmt.execute();
+			
+			ResultSet resultado = stmt.getGeneratedKeys();
+
+			if (resultado.next()) {
+				novaCategoria.setId(resultado.getInt(1));
+			}
+			
+		} catch (SQLException e) {
+			
+			System.out.println(" Erro ao salvar nova categoria produto. Causa: " + e.getMessage());
+		}
+
+		return novaCategoria;
+	}
+
+	public static ArrayList<CategoriaProdutoVO> consultarCategoriaProduto(String parametroBusca) {
+		String likeBusca = "%"+ parametroBusca + "%";
+		Connection conexao = Banco.getConnection();
+		String sql = " SELECT * FROM categoriaProduto WHERE descricao like '"+ likeBusca + "' ";
+
+		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql);
+
+		ArrayList<CategoriaProdutoVO> categorias = new ArrayList<CategoriaProdutoVO>();
+		try {
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				CategoriaProdutoVO categoria = construirCategoriaProdutoDoResultSet(rs);
+				categorias.add(categoria);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar categoria produto.");
+			System.out.println("Erro: " + e.getMessage());
+		}
+
+		return categorias;
 	}
 
 }

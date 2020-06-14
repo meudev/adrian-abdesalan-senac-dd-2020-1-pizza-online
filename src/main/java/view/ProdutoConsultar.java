@@ -5,9 +5,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
-import controller.ClienteController;
 import controller.ProdutoController;
-import model.vo.ClienteVO;
 import model.vo.ProdutoVO;
 
 import com.jgoodies.forms.layout.FormSpecs;
@@ -25,6 +23,8 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class ProdutoConsultar extends JPanel {
+	
+	TelaPrincipal telaPrincipal = new TelaPrincipal();
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
@@ -110,14 +110,11 @@ public class ProdutoConsultar extends JPanel {
 		btnEditarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String mensagem = null;
+				int linhaSelecionadaNaTabela = table.getSelectedRow();
+				ProdutoVO produtoSelecionado = produtos.get(linhaSelecionadaNaTabela - 1);
 				
-				//EDITAR
+				telaPrincipal.abrirProdutoAlterar(produtoSelecionado);
 				
-				
-				iniciarTabelaProdutos();
-				
-				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		});
 		add(btnEditarProduto, "4, 12, right, fill");
@@ -163,7 +160,7 @@ public class ProdutoConsultar extends JPanel {
 
 		for (ProdutoVO p : produtos) {
 
-			Object[] novaLinhaDaTabela = new Object[4];
+			Object[] novaLinhaDaTabela = new Object[3];
 			novaLinhaDaTabela[0] = p.getNome();
 			novaLinhaDaTabela[1] = p.getValor();
 			novaLinhaDaTabela[2] = p.getQuantidade();

@@ -17,6 +17,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.awt.event.ActionEvent;
 
 public class TelaInicial extends JFrame {
@@ -99,13 +102,15 @@ public class TelaInicial extends JFrame {
 		
 		JButton btnEntrar = new JButton("Entrar");
 		btnEntrar.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
+				
+				String txtSenhaTratada = md5(txtSenha.getText());
 				
 				//CONECTAR
 				UsuarioController controllerUsuario = new UsuarioController();
 				
-				@SuppressWarnings("deprecation")
-				String mensagem = controllerUsuario.conectarUsuario(txtLogin.getText(), txtSenha.getText());
+				String mensagem = controllerUsuario.conectarUsuario(txtLogin.getText(), txtSenhaTratada);
 				
 				if(mensagem.isEmpty()) {
 					
@@ -119,17 +124,36 @@ public class TelaInicial extends JFrame {
 					JOptionPane.showMessageDialog(null, mensagem);
 					
 				}
-				
+					
 
-				
 			}
 		});
 		getContentPane().add(btnEntrar, "6, 18, default, fill");
 		
 		JLabel lblDesenvoldidoPorAdrian = new JLabel("Desenvolvido por ADRIAN SALOMON FERREIRA ABDESALAN");
-		lblDesenvoldidoPorAdrian.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblDesenvoldidoPorAdrian.setFont(new Font("Tahoma", Font.BOLD, 12));
 		getContentPane().add(lblDesenvoldidoPorAdrian, "4, 22, 5, 1, right, fill");
 		
 	}
 	
+	public static String md5(String valor) {
+	     
+	    String md5 = null;
+	     
+	    if(null == valor) return null;
+	     
+	    try {
+	         
+	    MessageDigest digest = MessageDigest.getInstance("MD5");   
+	    digest.update(valor.getBytes(), 0, valor.length());
+	    md5 = new BigInteger(1, digest.digest()).toString(16);
+
+	    } catch (NoSuchAlgorithmException e) {
+
+	        e.printStackTrace();
+	    }
+	    return md5;
+	}
+	
+
 }

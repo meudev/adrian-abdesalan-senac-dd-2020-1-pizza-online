@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class ClienteConsultar extends JPanel {
+	
+	TelaPrincipal telaPrincipal = new TelaPrincipal();
 
 	private static final long serialVersionUID = 1L;
 	private JTable table;
@@ -89,10 +91,14 @@ public class ClienteConsultar extends JPanel {
 		add(btnBuscar, "8, 6, default, fill");
 		
 		table = new JTable();
+		limparTabelaClientes();
+		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int indiceSelecionado = table.getSelectedRow();
+				
+				System.out.println(indiceSelecionado);
 
 				if (indiceSelecionado > 0) {
 					btnEditarCliente.setEnabled(true);
@@ -109,19 +115,11 @@ public class ClienteConsultar extends JPanel {
 		btnEditarCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String mensagem = null;
-
-//				int linhaSelecionadaNaTabela = table.getSelectedRow();
-//				ClienteVO clienteSelecionado = clientes.get(linhaSelecionadaNaTabela - 1);
-
-//				clienteAlterar = new ClienteAlterar();
-//				getContentPane(clienteAlterars);
+				int linhaSelecionadaNaTabela = table.getSelectedRow();
+				ClienteVO clienteSelecionado = clientes.get(linhaSelecionadaNaTabela - 1);
 				
-//				JOptionPane.showMessageDialog(null, "Chamar a tela de edição e passar o objeto clienteSelecionado...");
-				
-				iniciarTabelaClientes();
-				
-				JOptionPane.showMessageDialog(null, mensagem);
+				telaPrincipal.abrirClienteAlterar(clienteSelecionado);
+		
 			}
 		});
 		add(btnEditarCliente, "4, 12, right, fill");
@@ -161,6 +159,7 @@ public class ClienteConsultar extends JPanel {
 	
 	private void atualizarTabelaClientes() {
 		limparTabelaClientes();
+		
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 
 		for (ClienteVO c : clientes) {
@@ -177,6 +176,11 @@ public class ClienteConsultar extends JPanel {
 	
 	private void limparTabelaClientes() {
 		table.setModel(new DefaultTableModel(new Object[][] { nomesColunas, }, nomesColunas));
+//		table = new JTable(table.getModel()) {
+//			public boolean isCellEditable(int rowIndex, int colIndex) {
+//				return false;
+//			}
+//		};
 	}
 
 }

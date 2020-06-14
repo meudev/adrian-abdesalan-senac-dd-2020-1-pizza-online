@@ -137,7 +137,7 @@ public class ClienteNovo extends JPanel {
 		add(txtCep, "4, 18, fill, fill");
 		txtCep.setColumns(10);
 		
-		btnBuscarCep = new JButton("\u2315");
+		btnBuscarCep = new JButton("►");
 		btnBuscarCep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -147,7 +147,7 @@ public class ClienteNovo extends JPanel {
 			}
 
 		});
-		btnBuscarCep.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnBuscarCep.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		add(btnBuscarCep, "6, 18, left, fill");
 		
 		lblLogradouro = new JLabel("Logradouro");

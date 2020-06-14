@@ -1,16 +1,17 @@
 package model.vo;
 
-public class CategoriaProdutoVO {
+public class StatusPedidoVO {
 	
 	private int id;
 	private String descricao;
-
-	public CategoriaProdutoVO(String descricao) {
+	
+	public StatusPedidoVO(int id, String descricao) {
 		super();
+		this.id = id;
 		this.descricao = descricao;
 	}
 
-	public CategoriaProdutoVO() {
+	public StatusPedidoVO() {
 		
 	}
 
@@ -34,4 +35,5 @@ public class CategoriaProdutoVO {
 	public String toString() {
 		return descricao;
 	}
+
 }
