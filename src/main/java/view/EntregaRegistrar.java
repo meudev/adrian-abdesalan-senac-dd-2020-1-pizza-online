@@ -22,6 +22,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.NumberFormat;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -144,6 +145,9 @@ public class EntregaRegistrar extends JPanel {
 	private void atualizarTabelaPedidos() {
 		limparTabelaPedidos();
 		DefaultTableModel model = (DefaultTableModel) tableEntregas.getModel();
+		
+		NumberFormat formatter = NumberFormat.getCurrencyInstance();
+		formatter.setMaximumFractionDigits(2);
 
 		for (PedidoVO p : pedidos) {
 
@@ -151,7 +155,7 @@ public class EntregaRegistrar extends JPanel {
 			novaLinhaDaTabela[0] = p.getId();
 			novaLinhaDaTabela[1] = p.getDataPedido();
 			novaLinhaDaTabela[2] = p.getIdCliente().getNome();
-			novaLinhaDaTabela[3] = p.getValorTotal();
+			novaLinhaDaTabela[3] = Integer.toString(p.getValorTotal()).substring(0,2)+","+Integer.toString(p.getValorTotal()).substring(2,Integer.toString(p.getValorTotal()).length());
 			novaLinhaDaTabela[4] = p.getIdStatus().getDescricao();
 
 			model.addRow(novaLinhaDaTabela);

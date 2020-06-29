@@ -211,9 +211,15 @@ public class ClienteNovo extends JPanel {
 				
 				String mensagem = controllerCliente.cadastrarNovoCliente(txtTelefone.getText(), txtNome.getText(), txtCep.getText(), txtLogradouro.getText(), txtNumero.getText(), txtComplemento.getText(), txtBairro.getText(), txtCidade.getText(), txtEstado.getText(), txtObservacao.getText() );
 
+
 				JOptionPane.showMessageDialog(null, mensagem);
 				
-				limparCampos();
+				if(mensagem == "Cliente cadastro com sucesso") {
+					
+					limparCampos();
+					
+				}
+
 				
 			}
 

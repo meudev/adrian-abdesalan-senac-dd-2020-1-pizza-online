@@ -116,14 +116,14 @@ public class CozinhaListar extends JPanel {
 	private void atualizarTabelaPedidos() {
 		limparTabelaPedidos();
 		DefaultTableModel model = (DefaultTableModel) tablePedidosCozinha.getModel();
-
+		
 		for (PedidoVO p : pedidos) {
 
 			Object[] novaLinhaDaTabela = new Object[5];
 			novaLinhaDaTabela[0] = p.getId();
 			novaLinhaDaTabela[1] = p.getDataPedido();
 			novaLinhaDaTabela[2] = p.getIdCliente().getNome();
-			novaLinhaDaTabela[3] = p.getValorTotal();
+			novaLinhaDaTabela[3] = Integer.toString(p.getValorTotal()).substring(0,2)+","+Integer.toString(p.getValorTotal()).substring(2,Integer.toString(p.getValorTotal()).length());
 			novaLinhaDaTabela[4] = p.getIdStatus().getDescricao();
 
 			model.addRow(novaLinhaDaTabela);

@@ -23,18 +23,26 @@ public class ClienteController {
 	public String cadastrarNovoCliente(String telefone, String nome, String cepTXT, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String observacao) {
 		String mensagem = "";
 		
-		int cep = Integer.parseInt(cepTXT);
+		if(cepTXT.isEmpty()) {
 			
-		mensagem += validarCampoDeTexto("Telefone", telefone, TAMANHO_MINIMO_CAMPO_TELEFONE, TAMANHO_MAXIMO_CAMPO_TELEFONE, true);
-		mensagem += validarCampoDeTexto("Nome do Cliente", nome, TAMANHO_MINIMO_CAMPO_NOME, TAMANHO_MAXIMO_CAMPO_NOME, true);
-		mensagem += validarCampoDeTexto("Número do Endereço", numero, TAMANHO_MINIMO_CAMPO_NUMERO, TAMANHO_MAXIMO_CAMPO_NUMERO, true);
+			mensagem = "Cep inválido.";
+			
+		} else {
 		
-		if (mensagem.isEmpty()) {
-
-			ClienteVO novoCliente = new ClienteVO(telefone, nome, cep, logradouro, numero, complemento, bairro, cidade, estado, observacao);
+			int cep = Integer.parseInt(cepTXT);
+				
+			mensagem += validarCampoDeTexto("Telefone", telefone, TAMANHO_MINIMO_CAMPO_TELEFONE, TAMANHO_MAXIMO_CAMPO_TELEFONE, true);
+			mensagem += validarCampoDeTexto("Nome do Cliente", nome, TAMANHO_MINIMO_CAMPO_NOME, TAMANHO_MAXIMO_CAMPO_NOME, true);
+			mensagem += validarCampoDeTexto("Número do Endereço", numero, TAMANHO_MINIMO_CAMPO_NUMERO, TAMANHO_MAXIMO_CAMPO_NUMERO, true);
 			
-			mensagem = ClienteBO.salvar(novoCliente);
-			
+			if (mensagem.isEmpty()) {
+	
+				ClienteVO novoCliente = new ClienteVO(telefone, nome, cep, logradouro, numero, complemento, bairro, cidade, estado, observacao);
+				
+				mensagem = ClienteBO.salvar(novoCliente);
+				
+			}
+		
 		}
 		
 		return mensagem;
