@@ -1,6 +1,9 @@
 package model.bo;
 
+import java.util.ArrayList;
+
 import model.dao.ClienteDAO;
+import model.util.GeradorPlanilha;
 import model.vo.ClienteVO;
 
 public class ClienteBO {
@@ -82,6 +85,13 @@ public class ClienteBO {
 		}
 		
 		return mensagem;
+	}
+
+	public void gerarPlanilha(ArrayList<ClienteVO> clientes, String caminhoEscolhido) {
+		GeradorPlanilha geradorPlanilha = new GeradorPlanilha();
+		
+		geradorPlanilha.gerarPlanilhaClientes(clientes, caminhoEscolhido);
+		
 	}
 
 }

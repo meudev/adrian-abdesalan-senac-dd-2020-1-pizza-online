@@ -111,6 +111,11 @@ public class ClienteController {
 		return mensagem;
 	}
 
+	public void gerarPlanilha(ArrayList<ClienteVO> clientes, String caminhoEscolhido) {
+		ClienteBO bo = new ClienteBO();
+		bo.gerarPlanilha(clientes, caminhoEscolhido);
+	}
+
 
 
 }

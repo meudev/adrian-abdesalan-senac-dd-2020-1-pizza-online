@@ -13,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -35,6 +36,7 @@ public class ClienteConsultar extends JPanel {
 	private String[] nomesColunas = { "NOME", "TELEFONE", "BAIRRO", "CIDADE" };
 	private JButton btnEditarCliente;
 	private JButton btnExcluirCliente;
+	private JButton btnGerarPlanilha;
 
 	public ClienteConsultar() {
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -68,7 +70,28 @@ public class ClienteConsultar extends JPanel {
 		
 		lblClienteConsultar = new JLabel("Clientes > Consultar Cliente");
 		lblClienteConsultar.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblClienteConsultar, "4, 2, 7, 1, default, center");
+		add(lblClienteConsultar, "4, 2, 5, 1, default, center");
+		
+		btnGerarPlanilha = new JButton("Gerar Planilha");
+		btnGerarPlanilha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//GERAR PLANILHA
+				JFileChooser jfc = new JFileChooser();
+				jfc.setDialogTitle("Salvar planilha como...");
+				
+				int resultado = jfc.showSaveDialog(null);
+				if(resultado == JFileChooser.APPROVE_OPTION) {
+					String caminhoEscolhido = jfc.getSelectedFile().getAbsolutePath();
+					
+					ClienteController controller = new ClienteController();
+					controller.gerarPlanilha(clientes, caminhoEscolhido);
+					
+				}			
+				
+			}
+		});
+		add(btnGerarPlanilha, "10, 2, right, fill");
 				
 		JLabel lblBuscarPorNome = new JLabel("Buscar por Nome, Telefone, CEP, Endere\u00E7o");
 		add(lblBuscarPorNome, "6, 4");
