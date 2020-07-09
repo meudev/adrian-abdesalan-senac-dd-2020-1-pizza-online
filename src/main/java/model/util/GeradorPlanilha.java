@@ -38,7 +38,7 @@ public class GeradorPlanilha {
 			novaLinha.createCell(1).setCellValue(clienteAtual.getCodigo().getCodigo() +" "+ clienteAtual.getTelefone());
 			novaLinha.createCell(2).setCellValue(clienteAtual.getLogradouro() +", "+ clienteAtual.getNumero() +" - "+ clienteAtual.getComplemento());
 			novaLinha.createCell(3).setCellValue(clienteAtual.getBairro());
-			novaLinha.createCell(4).setCellValue(clienteAtual.getTelefone());
+			novaLinha.createCell(4).setCellValue(clienteAtual.getCidade());
 		}
 
 		for (int i = 0; i < nomesColunas.length; i++) {
