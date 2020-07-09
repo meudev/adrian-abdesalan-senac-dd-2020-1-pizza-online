@@ -6,10 +6,12 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
 import controller.ClienteController;
+import controller.CodigoPaisController;
 import controller.PedidoController;
 import controller.ProdutoController;
 import controller.StatusPedidoController;
 import model.vo.ClienteVO;
+import model.vo.CodigoPaisVO;
 import model.vo.PedidoItemVO;
 import model.vo.ProdutoVO;
 import model.vo.StatusPedidoVO;
@@ -17,32 +19,44 @@ import model.vo.StatusPedidoVO;
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 
 public class PedidoNovo extends JPanel {
 	
 	ClienteVO cliente;
+	
+	Locale localeBR = new Locale("pt","BR");
+	NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
 
 	private static final long serialVersionUID = 1L;
 	private JTextField txtDataPedido;
-	private JTextField txtTelefone;
+	private JFormattedTextField txtTelefone;
 	private JTextField txtNome;
 	private JTextField txtEndereco;
 	private JTextField txtNumero;
@@ -52,13 +66,19 @@ public class PedidoNovo extends JPanel {
 	private JTextField txtTotalPedido;
 	private JTextField txtProdutoSelecionado;
 	
+	private JComboBox<?> cbPais;
+	
 	private JTable tableProdutos;
 	private ArrayList<ProdutoVO> produtos;
-	private String[] nomesColunas = { "NOME", "VALOR", "QUANTIDADE" };
+	private String[] nomesColunas = { "PRODUTO", "VALOR", "ESTOQUE" };
 	
 	private JTable tablePedido;
 	private List<PedidoItemVO> listPedidoItem = new ArrayList<PedidoItemVO>();
-	private String[] nomesColunasPedido = { "NOME", "VALOR", "QUANTIDADE" };
+	private String[] nomesColunasPedido = { "PRODUTO", "VALOR", "QUANTIDADE" };
+	
+	private MaskFormatter mascaraNula;
+	private MaskFormatter mascaraTelefoneFixo;
+	private MaskFormatter mascaraTelefoneCelular;
 	
 	JButton btnFinalizarPedido;
 	JButton btnAdicionarNoPedido;
@@ -74,7 +94,7 @@ public class PedidoNovo extends JPanel {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(20dlu;default)"),
 				FormSpecs.RELATED_GAP_COLSPEC,
-				FormSpecs.DEFAULT_COLSPEC,
+				ColumnSpec.decode("70px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -153,6 +173,12 @@ public class PedidoNovo extends JPanel {
 		JLabel lblProdutos = new JLabel("Produtos");
 		add(lblProdutos, "16, 4");
 		
+		JLabel label = new JLabel("País");
+		add(label, "4, 6, default, bottom");
+		
+		JLabel lblTelefone = new JLabel("Telefone");
+		add(lblTelefone, "6, 6, left, bottom");
+		
 		tablePedido = new JTable();
 //		tablePedido.addMouseListener(new MouseAdapter() {
 //			@Override
@@ -193,10 +219,32 @@ public class PedidoNovo extends JPanel {
 		});
 		add(tableProdutos, "16, 6, 1, 27, fill, fill");
 		
-		JLabel lblTelefone = new JLabel("Telefone");
-		add(lblTelefone, "4, 8, right, default");
+		CodigoPaisController controllerCodigoPais = new CodigoPaisController();
+		ArrayList<CodigoPaisVO> listCodigoPais = controllerCodigoPais.listarTodasCodigoPais();
+		cbPais = new JComboBox(listCodigoPais.toArray());
+		cbPais.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent  e) {
+				//atualizarMascaraTelefone(cbPais.getSelectedItem());
+			}
+
+		});
+		add(cbPais, "4, 8, fill, fill");
 		
-		txtTelefone = new JTextField();
+		txtTelefone = new JFormattedTextField();
+		txtTelefone.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				atualizarMascaraTelefone();
+			}
+		});
+		txtTelefone.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				validaMascaraTelefone();
+			}
+
+		});
 		add(txtTelefone, "6, 8, left, fill");
 		txtTelefone.setColumns(10);
 		
@@ -305,6 +353,13 @@ public class PedidoNovo extends JPanel {
 				atualizarTabelaPedidos();
 			}
 		});
+		txtValorEntrega.addFocusListener(new java.awt.event.FocusAdapter() {
+			@Override
+			public void focusLost(java.awt.event.FocusEvent e) {
+				atualizarMascaraValor(txtValorEntrega.getText());
+			}
+
+		});
 		add(txtValorEntrega, "4, 36, fill, fill");
 		txtValorEntrega.setColumns(10);
 		txtValorEntrega.setText("0,00");
@@ -381,13 +436,17 @@ public class PedidoNovo extends JPanel {
 
 	private void atualizarTabelaProdutos() {
 		limparTabelaProdutos();
+		
 		DefaultTableModel model = (DefaultTableModel) tableProdutos.getModel();
-
+		
 		for (ProdutoVO p : produtos) {
+			
+			String valor = Integer.toString(p.getValor());
+			String valorDecimal = "R$ "+ valor.substring(0, valor.length()-2) +","+ valor.substring(valor.length()-2, valor.length());
 
 			Object[] novaLinhaDaTabela = new Object[4];
 			novaLinhaDaTabela[0] = p.getNome();
-			novaLinhaDaTabela[1] = p.getValor();
+			novaLinhaDaTabela[1] = valorDecimal;
 			novaLinhaDaTabela[2] = p.getQuantidade();
 
 			model.addRow(novaLinhaDaTabela);
@@ -411,16 +470,31 @@ public class PedidoNovo extends JPanel {
 		
 		int somaTotal = 0;
 		String taxaTexto = txtValorEntrega.getText();
+		taxaTexto = taxaTexto.replace("R$", "");
 		taxaTexto = taxaTexto.replace(",", "");
 		taxaTexto = taxaTexto.replace(".", "");
-		taxaTexto = (taxaTexto != null) ? taxaTexto : "0";
-		int taxa = Integer.parseInt(taxaTexto);
+		if(taxaTexto.length() > 3) {
+			taxaTexto = taxaTexto.substring(1, taxaTexto.length());
+		} else {
+			taxaTexto = (taxaTexto != null) ? taxaTexto : "0";
+		}
+
+		int taxa = 0;
+
+		try {
+			taxa = Integer.parseInt(taxaTexto);
+		} catch (NumberFormatException ex) {
+			System.out.println("Erro na conversão do parseInt. Causa: "+ ex);
+		}
 
 		for (PedidoItemVO p : listPedidoItem) {
+			
+			String valor = Integer.toString(p.getValor());
+			String valorDecimal = "R$ "+ valor.substring(0, valor.length()-2) +","+ valor.substring(valor.length()-2, valor.length());	
 
 			Object[] novaLinhaDaTabela = new Object[4];
 			novaLinhaDaTabela[0] = p.getIdProduto().getNome();
-			novaLinhaDaTabela[1] = p.getValor();
+			novaLinhaDaTabela[1] = valorDecimal;
 			novaLinhaDaTabela[2] = p.getQuantidade();
 			
 			somaTotal = somaTotal + p.getValor();
@@ -430,7 +504,16 @@ public class PedidoNovo extends JPanel {
 		
 		somaTotal = somaTotal + taxa;
 		String somaTotalTexto = Integer.toString(somaTotal);
-		txtTotalPedido.setText(somaTotalTexto);
+		
+		if(somaTotalTexto.length() < 2) {
+			somaTotalTexto = "00" + somaTotalTexto;
+		} else if (somaTotalTexto.length() == 2) {
+			somaTotalTexto = "0" + somaTotalTexto;
+		}
+		
+		String valorTotalDecimal = "R$ "+ somaTotalTexto.substring(0, somaTotalTexto.length()-2) +","+ somaTotalTexto.substring(somaTotalTexto.length()-2, somaTotalTexto.length());	
+		txtTotalPedido.setText(valorTotalDecimal);
+
 		
 		validaFinalizarPedido();
 	}
@@ -441,27 +524,45 @@ public class PedidoNovo extends JPanel {
 	
 	private void validaFinalizarPedido() {
 		
-		int totalPedido = Integer.parseInt(txtTotalPedido.getText());
+		String valorLimpo = txtTotalPedido.getText();
+		valorLimpo = valorLimpo.replace("R$", "");
+		valorLimpo = valorLimpo.replace(",", "");
+		valorLimpo = valorLimpo.replace(".", "");
+		valorLimpo = valorLimpo.substring(1, valorLimpo.length());
+		
+		int totalPedido = Integer.parseInt(valorLimpo);
 		String nome = txtNome.getText();
 		String endereco = txtEndereco.getText();
 		String numero = txtNumero.getText();
 		
-		System.out.println(totalPedido);
-		System.out.println(nome);
-		System.out.println(endereco);
-		System.out.println(numero);
-		
 		if(totalPedido > 0) {
 			if(nome.isEmpty() && endereco.isEmpty() && numero.isEmpty()) {
-				System.out.println("VERDADEIRO");
 				btnFinalizarPedido.setEnabled(false);
 			} else {
-				System.out.println("FALSE2");
 				btnFinalizarPedido.setEnabled(true);
 			}
 		} else {
-			System.out.println("FALSE");
 			btnFinalizarPedido.setEnabled(false);
+		}
+		
+	}
+	
+	private void atualizarMascaraValor(String valor) {
+		String valorTaxaTexto = valor;
+		valorTaxaTexto = valorTaxaTexto.replace(",", "");
+		valorTaxaTexto = valorTaxaTexto.replace(".", "");
+		
+		if(valorTaxaTexto.length() < 2) {
+			valorTaxaTexto = "00" + valorTaxaTexto;
+		} else if (valor.length() == 2) {
+			valorTaxaTexto = "0" + valorTaxaTexto;
+		}
+		
+		if(valor.isEmpty()) {
+			txtValorEntrega.setText(dinheiro.format(0.00));
+		} else {
+			String valorTotalDecimal = "R$ "+ valorTaxaTexto.substring(0, valorTaxaTexto.length()-2) +","+ valorTaxaTexto.substring(valorTaxaTexto.length()-2, valorTaxaTexto.length());	
+			txtValorEntrega.setText(valorTotalDecimal);
 		}
 		
 	}
@@ -478,6 +579,64 @@ public class PedidoNovo extends JPanel {
 		txtTotalPedido.setText(null);
 		txtProdutoSelecionado.setText(null);
 		listPedidoItem = null;
+	}
+	
+	private void atualizarMascaraTelefone() {
+		String codigoPais = cbPais.getSelectedItem().toString();
+		
+		if(codigoPais.equals("+55")) {
+			mascararCampo(1);
+		} else {
+			mascararCampo(0);
+		}
+		
+	}
+	
+	private void definirMascaramento(){
+		try{
+			mascaraNula = new MaskFormatter();
+			mascaraTelefoneCelular = new MaskFormatter("(##) # ####-####");
+			mascaraTelefoneFixo = new MaskFormatter("(##) ####-####");
+		}catch(ParseException pex){
+			System.out.println("ERRO: " + pex.getMessage());
+		}
+	}
+	
+	private void mascararCampo(int tipoMascaramento){
+		definirMascaramento();
+		
+		switch(tipoMascaramento){
+			case 0:
+				txtTelefone.setValue(null);
+				txtTelefone.setFormatterFactory(null);
+				System.out.println("sem mascara");
+				break;
+			case 1:
+				txtTelefone.setValue(null);
+				txtTelefone.setFormatterFactory(new DefaultFormatterFactory(mascaraTelefoneCelular));
+				System.out.println("celular");
+				break;
+			case 2:
+				txtTelefone.setValue(null);
+				txtTelefone.setFormatterFactory(new DefaultFormatterFactory(mascaraTelefoneFixo));
+				System.out.println("fixo");
+		}
+	}
+	
+	private void validaMascaraTelefone() {
+		String codigoPais = cbPais.getSelectedItem().toString();
+		int tamanhoNumero = txtTelefone.getText().trim().length();
+		
+		if(codigoPais.equals("+55") && tamanhoNumero == 15) {
+			String numeroDigitado = txtTelefone.getText().substring(0, txtTelefone.getText().length() - 1);
+			numeroDigitado = numeroDigitado.replaceAll(" ", "");
+			numeroDigitado = numeroDigitado.replaceAll("[(,),-]", "");
+			
+			mascararCampo(2);
+			
+			txtTelefone.setText(numeroDigitado);
+			
+		}
 	}
 
 }

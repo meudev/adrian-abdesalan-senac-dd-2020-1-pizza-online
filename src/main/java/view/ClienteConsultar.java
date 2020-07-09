@@ -33,7 +33,7 @@ public class ClienteConsultar extends JPanel {
 	private JTextField txtBusca;
 	private JLabel lblClienteConsultar;
 	private ArrayList<ClienteVO> clientes;
-	private String[] nomesColunas = { "NOME", "TELEFONE", "BAIRRO", "CIDADE" };
+	private String[] nomesColunas = { "NOME", "TELEFONE", "ENDEREÇO", "BAIRRO", "CIDADE" };
 	private JButton btnEditarCliente;
 	private JButton btnExcluirCliente;
 	private JButton btnGerarPlanilha;
@@ -187,11 +187,12 @@ public class ClienteConsultar extends JPanel {
 
 		for (ClienteVO c : clientes) {
 
-			Object[] novaLinhaDaTabela = new Object[4];
+			Object[] novaLinhaDaTabela = new Object[5];
 			novaLinhaDaTabela[0] = c.getNome();
-			novaLinhaDaTabela[1] = c.getTelefone();
-			novaLinhaDaTabela[2] = c.getBairro();
-			novaLinhaDaTabela[3] = c.getCidade();
+			novaLinhaDaTabela[1] = c.getCodigo().getCodigo() +" "+ c.getTelefone();
+			novaLinhaDaTabela[2] = c.getLogradouro() +", "+ c.getNumero() +" - "+ c.getComplemento();
+			novaLinhaDaTabela[3] = c.getBairro();
+			novaLinhaDaTabela[4] = c.getCidade();
 
 			model.addRow(novaLinhaDaTabela);
 		}

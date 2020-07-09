@@ -21,7 +21,13 @@ public class ProdutoController {
 	public String salvar(CategoriaProdutoVO categoria, String nomeProduto, String descricao, String valorTXT, String quantidadeTXT, String disponivelTXT) {
 		String mensagem = "";
 		boolean disponivel = false;
-		int quantidade = Integer.parseInt(quantidadeTXT);
+		int quantidade;
+		try {
+			quantidade = Integer.parseInt(quantidadeTXT);
+		} catch (Exception e){
+			quantidade = 0;
+		}
+
 		int valor;
 		
 		if(disponivelTXT != null) {
@@ -61,8 +67,14 @@ public class ProdutoController {
 	}
 
 	private int removerFormatacaoValor(String valorFormatado) {
+		String valorLimpo = valorFormatado;
+		valorLimpo = valorLimpo.replace("R$", "");
+		valorLimpo = valorLimpo.replace(",", "");
+		valorLimpo = valorLimpo.replace(".", "");
+		valorLimpo = valorLimpo.substring(1, valorLimpo.length());
 		
-		int valorInteiro = Integer.parseInt(valorFormatado.replace(",", ""));
+		System.out.println(valorLimpo);
+		int valorInteiro = Integer.parseInt(valorLimpo);
 		
 		return valorInteiro;
 	}

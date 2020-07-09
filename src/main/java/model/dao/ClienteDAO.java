@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.vo.ClienteVO;
+import model.vo.CodigoPaisVO;
 
 public class ClienteDAO {
 
@@ -43,23 +44,25 @@ public class ClienteDAO {
 	
 	public ClienteVO salvar(ClienteVO novoCliente) {
 
-		String sql = " INSERT INTO cliente (telefone, nome, cep, logradouro, numero, complemento, bairro, cidade, estado, observacoes) " + " VALUES (?,?,?,?,?,?,?,?,?,?)";
+		String sql = " INSERT INTO cliente (idCodigo, telefone, nome, cep, logradouro, numero, complemento, bairro, cidade, estado, observacoes) " + " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
 		Connection conexao = Banco.getConnection();
 		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql, PreparedStatement.RETURN_GENERATED_KEYS);
 		
 		try {
 			
-			stmt.setString(1, novoCliente.getTelefone());
-			stmt.setString(2, novoCliente.getNome());
-			stmt.setInt(3, novoCliente.getCep());
-			stmt.setString(4, novoCliente.getLogradouro());
-			stmt.setString(5, novoCliente.getNumero());
-			stmt.setString(6, novoCliente.getComplemento());
-			stmt.setString(7, novoCliente.getBairro());
-			stmt.setString(8, novoCliente.getCidade());
-			stmt.setString(9, novoCliente.getEstado());
-			stmt.setString(10, novoCliente.getObservacao());
+			System.out.println(novoCliente.getTelefone());
+			stmt.setInt(1, novoCliente.getCodigo().getId());
+			stmt.setString(2, novoCliente.getTelefone());
+			stmt.setString(3, novoCliente.getNome().toUpperCase());
+			stmt.setInt(4, novoCliente.getCep());
+			stmt.setString(5, novoCliente.getLogradouro().toUpperCase());
+			stmt.setString(6, novoCliente.getNumero().toUpperCase());
+			stmt.setString(7, novoCliente.getComplemento().toUpperCase());
+			stmt.setString(8, novoCliente.getBairro().toUpperCase());
+			stmt.setString(9, novoCliente.getCidade().toUpperCase());
+			stmt.setString(10, novoCliente.getEstado().toUpperCase());
+			stmt.setString(11, novoCliente.getObservacao().toUpperCase());
 			stmt.execute();
 			
 			ResultSet resultado = stmt.getGeneratedKeys();
@@ -115,7 +118,6 @@ public class ClienteDAO {
 		
 		try {
 			c.setId(rs.getInt("id"));
-			c.setTelefone(rs.getString("telefone"));
 			c.setNome(rs.getString("nome"));
 			c.setCep(rs.getInt("cep"));
 			c.setLogradouro(rs.getString("logradouro"));
@@ -126,6 +128,20 @@ public class ClienteDAO {
 			c.setEstado(rs.getString("estado"));
 			c.setObservacao(rs.getString("observacoes"));
 			
+			if(rs.getInt("idCodigo") == 1) {
+				if(rs.getString("telefone").length() == 10) {
+					c.setTelefone("(" + rs.getString("telefone").substring(0, 2) + ") " + rs.getString("telefone").substring(2, 6) +"-"+ rs.getString("telefone").substring(6, 10));
+				} else {
+					c.setTelefone("(" + rs.getString("telefone").substring(0, 2) + ") " + rs.getString("telefone").substring(2, 6) +"-"+ rs.getString("telefone").substring(6, 11));					
+				}
+			} else {
+				c.setTelefone(rs.getString("telefone"));
+			}
+			
+			//codigo
+			CodigoPaisDAO codigoPaisDAO = new CodigoPaisDAO();
+			CodigoPaisVO codigoPais = codigoPaisDAO.consultarCodigoPaisPorId(rs.getInt("idCodigo"));
+			c.setCodigo(codigoPais);					
 
 		} catch (SQLException e) {
 			
@@ -181,31 +197,30 @@ public class ClienteDAO {
 		
 		boolean alterado = false;
 		int id = alterarCliente.getId();
-
-		String sql = "UPDATE cliente SET telefone = ?, nome = ?, cep = ?, logradouro = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, estado = ?, observacoes = ? WHERE id = "+ id;
+		
+		String sql = "UPDATE cliente SET idCodigo = ?, telefone = ?, nome = ?, cep = ?, logradouro = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, estado = ?, observacoes = ? WHERE id = "+ id;
 
 		Connection conexao = Banco.getConnection();
 		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql, PreparedStatement.RETURN_GENERATED_KEYS);
-		
+		int registrosAlterados = 0;
 		try {
-			
-			stmt.setString(1, alterarCliente.getTelefone());
-			stmt.setString(2, alterarCliente.getNome());
-			stmt.setInt(3, alterarCliente.getCep());
-			stmt.setString(4, alterarCliente.getLogradouro());
-			stmt.setString(5, alterarCliente.getNumero());
-			stmt.setString(6, alterarCliente.getComplemento());
-			stmt.setString(7, alterarCliente.getBairro());
-			stmt.setString(8, alterarCliente.getCidade());
-			stmt.setString(9, alterarCliente.getEstado());
-			stmt.setString(10, alterarCliente.getObservacao());
+			System.out.println(alterarCliente.getCodigo().getId());
+			stmt.setInt(1, alterarCliente.getCodigo().getId());
+			stmt.setString(2, alterarCliente.getTelefone());
+			stmt.setString(3, alterarCliente.getNome().toUpperCase());
+			stmt.setInt(4, alterarCliente.getCep());
+			stmt.setString(5, alterarCliente.getLogradouro().toUpperCase());
+			stmt.setString(6, alterarCliente.getNumero().toUpperCase());
+			stmt.setString(7, alterarCliente.getComplemento().toUpperCase());
+			stmt.setString(8, alterarCliente.getBairro().toUpperCase());
+			stmt.setString(9, alterarCliente.getCidade().toUpperCase());
+			stmt.setString(10, alterarCliente.getEstado().toUpperCase());
+			stmt.setString(11, alterarCliente.getObservacao().toUpperCase());
 			stmt.execute();
 			
-			ResultSet resultado = stmt.getGeneratedKeys();
-
-			if (resultado.next()) {
-				
-				alterarCliente.setId(resultado.getInt(1));
+			registrosAlterados = stmt.executeUpdate();
+			
+			if(registrosAlterados > 0) {
 				alterado = true;
 			}
 			

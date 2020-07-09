@@ -3,6 +3,7 @@ package model.vo;
 public class ClienteVO {
 	
 	private int id;
+	private CodigoPaisVO codigo;
 	private String telefone;
 	private String nome;
 	private int cep;
@@ -14,8 +15,9 @@ public class ClienteVO {
 	private String estado;
 	private String observacao;
 	
-	public ClienteVO(String telefone, String nome, int cep, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String observacao) {
+	public ClienteVO(CodigoPaisVO codigo, String telefone, String nome, int cep, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String observacao) {
 		super();
+		this.codigo = codigo;
 		this.telefone = telefone;
 		this.nome = nome;
 		this.cep = cep;
@@ -38,6 +40,14 @@ public class ClienteVO {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public CodigoPaisVO getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(CodigoPaisVO codigo) {
+		this.codigo = codigo;
 	}
 
 	public String getTelefone() {

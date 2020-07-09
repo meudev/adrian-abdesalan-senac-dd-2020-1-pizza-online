@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.bo.ClienteBO;
 import model.dao.ClienteDAO;
 import model.vo.ClienteVO;
+import model.vo.CodigoPaisVO;
 
 public class ClienteController {
 	
@@ -17,27 +18,39 @@ public class ClienteController {
 	private static final int TAMANHO_MINIMO_CAMPO_NOME = 2;
 	private static final int TAMANHO_MAXIMO_CAMPO_NOME = 100;
 	
+	private static final int TAMANHO_MINIMO_CAMPO_LOGRADOURO = 2;
+	private static final int TAMANHO_MAXIMO_CAMPO_LOGRADOURO = 100;
+	
 	private static final int TAMANHO_MINIMO_CAMPO_NUMERO = 1;
 	private static final int TAMANHO_MAXIMO_CAMPO_NUMERO = 10;
+	
+	private static final int TAMANHO_MINIMO_CAMPO_BAIRRO = 1;
+	private static final int TAMANHO_MAXIMO_CAMPO_BAIRRO = 50;
 
-	public String cadastrarNovoCliente(String telefone, String nome, String cepTXT, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String observacao) {
+	public String cadastrarNovoCliente(CodigoPaisVO codigoPaisVO, String telefone, String nome, String cepTXT, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String observacao) {
 		String mensagem = "";
 		
+		String telefoneLimpo = telefone.replaceAll(" ", "");
+		telefoneLimpo = telefoneLimpo.replaceAll("[(,),-]", "");
+
 		if(cepTXT.isEmpty()) {
 			
 			mensagem = "Cep inválido.";
 			
 		} else {
 		
-			int cep = Integer.parseInt(cepTXT);
+			String cepReplace = cepTXT.replace("-", "");
+			int cep = Integer.parseInt(cepReplace);
 				
-			mensagem += validarCampoDeTexto("Telefone", telefone, TAMANHO_MINIMO_CAMPO_TELEFONE, TAMANHO_MAXIMO_CAMPO_TELEFONE, true);
+			mensagem += validarCampoDeTexto("Telefone", telefoneLimpo, TAMANHO_MINIMO_CAMPO_TELEFONE, TAMANHO_MAXIMO_CAMPO_TELEFONE, true);
 			mensagem += validarCampoDeTexto("Nome do Cliente", nome, TAMANHO_MINIMO_CAMPO_NOME, TAMANHO_MAXIMO_CAMPO_NOME, true);
+			mensagem += validarCampoDeTexto("Logradouro", logradouro, TAMANHO_MINIMO_CAMPO_LOGRADOURO, TAMANHO_MAXIMO_CAMPO_LOGRADOURO, true);
 			mensagem += validarCampoDeTexto("Número do Endereço", numero, TAMANHO_MINIMO_CAMPO_NUMERO, TAMANHO_MAXIMO_CAMPO_NUMERO, true);
+			mensagem += validarCampoDeTexto("Bairro", bairro, TAMANHO_MINIMO_CAMPO_BAIRRO, TAMANHO_MAXIMO_CAMPO_BAIRRO, true);
 			
 			if (mensagem.isEmpty()) {
 	
-				ClienteVO novoCliente = new ClienteVO(telefone, nome, cep, logradouro, numero, complemento, bairro, cidade, estado, observacao);
+				ClienteVO novoCliente = new ClienteVO(codigoPaisVO, telefoneLimpo, nome, cep, logradouro, numero, complemento, bairro, cidade, estado, observacao);
 				
 				mensagem = ClienteBO.salvar(novoCliente);
 				
@@ -63,9 +76,12 @@ public class ClienteController {
 	public ClienteVO buscarCliente(String telefone) {
 		ClienteVO cliente = null;
 		
-		if(telefone.length() > 9 && telefone.length() < 12) {
+		String telefoneLimpo = telefone.replaceAll(" ", "");
+		telefoneLimpo = telefoneLimpo.replaceAll("[(,),-]", "");
+		
+		if(telefoneLimpo.length() > 9  && telefoneLimpo.length() < 12) {
 			
-			cliente = ClienteBO.buscarCliente(telefone);
+			cliente = ClienteBO.buscarCliente(telefoneLimpo);
 			
 		}
 
@@ -91,19 +107,23 @@ public class ClienteController {
 		return mensagem;
 	}
 
-	public String cadastrarAlteracaoCliente(int id, String telefone, String nome, String cepTXT, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String observacao) {
+	public String cadastrarAlteracaoCliente(CodigoPaisVO CodigoPaisVO, int id, String telefone, String nome, String cepTXT, String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String observacao) {
 		String mensagem = "";
 		
 		int cep = Integer.parseInt(cepTXT);
+		
+		String telefoneLimpo = telefone.replaceAll(" ", "");
+		telefoneLimpo = telefoneLimpo.replaceAll("[(,),-]", "");
 			
-		mensagem += validarCampoDeTexto("Telefone", telefone, TAMANHO_MINIMO_CAMPO_TELEFONE, TAMANHO_MAXIMO_CAMPO_TELEFONE, true);
+		mensagem += validarCampoDeTexto("Telefone", telefoneLimpo, TAMANHO_MINIMO_CAMPO_TELEFONE, TAMANHO_MAXIMO_CAMPO_TELEFONE, true);
 		mensagem += validarCampoDeTexto("Nome do Cliente", nome, TAMANHO_MINIMO_CAMPO_NOME, TAMANHO_MAXIMO_CAMPO_NOME, true);
 		mensagem += validarCampoDeTexto("Número do Endereço", numero, TAMANHO_MINIMO_CAMPO_NUMERO, TAMANHO_MAXIMO_CAMPO_NUMERO, true);
 		
 		if (mensagem.isEmpty()) {
 
-			ClienteVO alterarCliente = new ClienteVO(telefone, nome, cep, logradouro, numero, complemento, bairro, cidade, estado, observacao);
-			
+			ClienteVO alterarCliente = new ClienteVO(CodigoPaisVO, telefoneLimpo, nome, cep, logradouro, numero, complemento, bairro, cidade, estado, observacao);
+			alterarCliente.setId(id);
+
 			mensagem = ClienteBO.salvarAlteracao(alterarCliente);
 			
 		}

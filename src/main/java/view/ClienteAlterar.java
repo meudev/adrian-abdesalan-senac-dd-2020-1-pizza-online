@@ -7,6 +7,7 @@ import com.jgoodies.forms.layout.RowSpec;
 
 import controller.ClienteController;
 import model.vo.ClienteVO;
+import model.vo.CodigoPaisVO;
 
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
@@ -26,7 +27,8 @@ import java.awt.event.ActionEvent;
 public class ClienteAlterar extends JPanel {
 	
 	ClienteVO cliente = new ClienteVO();
-
+	CodigoPaisVO codigoPais = null;
+	
 	private static final long serialVersionUID = 1L;
 	private JTextField txtTelefone;
 	private JTextField txtNome;
@@ -53,11 +55,15 @@ public class ClienteAlterar extends JPanel {
 	String bairro;
 	String cidade;
 	String uf;
+	private JTextField txtCodigoPais;
+	private JLabel lblCdigo;
 
 	public ClienteAlterar(ClienteVO clienteSelecionado) {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(20dlu;default)"),
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("60px"),
 				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
 				FormSpecs.RELATED_GAP_COLSPEC,
@@ -114,27 +120,36 @@ public class ClienteAlterar extends JPanel {
 			
 		lblClientesNovo = new JLabel("Clientes > Alterar");
 		lblClientesNovo.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblClientesNovo, "4, 2, 11, 1");
+		add(lblClientesNovo, "4, 2, 13, 1");
+		
+		lblCdigo = new JLabel("C\u00F3digo");
+		add(lblCdigo, "4, 4");
 		
 		JLabel lblTelefone = new JLabel("Telefone");
-		add(lblTelefone, "4, 4");
+		add(lblTelefone, "6, 4");
+		
+		txtCodigoPais = new JTextField();
+		add(txtCodigoPais, "4, 6, fill, fill");
+		txtCodigoPais.setColumns(10);
+		txtCodigoPais.disable();
 		
 		txtTelefone = new JTextField();
-		add(txtTelefone, "4, 6, fill, fill");
+		add(txtTelefone, "6, 6, fill, fill");
 		txtTelefone.setColumns(10);
+		txtTelefone.disable();
 		
 		JLabel lblNome = new JLabel("Nome");
-		add(lblNome, "4, 10");
+		add(lblNome, "4, 10, 3, 1");
 		
 		txtNome = new JTextField();
-		add(txtNome, "4, 12, 3, 1, fill, fill");
+		add(txtNome, "4, 12, 5, 1, fill, fill");
 		txtNome.setColumns(10);
 		
 		JLabel lblCep = new JLabel("CEP");
-		add(lblCep, "4, 16");
+		add(lblCep, "4, 16, 3, 1");
 		
 		txtCep = new JTextField();
-		add(txtCep, "4, 18, fill, fill");
+		add(txtCep, "4, 18, 3, 1, fill, fill");
 		txtCep.setColumns(10);
 		
 		btnBuscarCep = new JButton("\u2315");
@@ -148,59 +163,59 @@ public class ClienteAlterar extends JPanel {
 
 		});
 		btnBuscarCep.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		add(btnBuscarCep, "6, 18, left, fill");
+		add(btnBuscarCep, "8, 18, left, fill");
 		
 		lblLogradouro = new JLabel("Logradouro");
-		add(lblLogradouro, "4, 20");
+		add(lblLogradouro, "4, 20, 3, 1");
 		
 		lblNmero = new JLabel("N\u00FAmero");
-		add(lblNmero, "10, 20");
+		add(lblNmero, "12, 20");
 		
 		lblComplemento = new JLabel("Complemento");
-		add(lblComplemento, "14, 20");
+		add(lblComplemento, "16, 20");
 		
 		txtLogradouro = new JTextField();
-		add(txtLogradouro, "4, 22, 3, 1, fill, fill");
+		add(txtLogradouro, "4, 22, 5, 1, fill, fill");
 		txtLogradouro.setEditable(false);
 		txtLogradouro.setColumns(10);
 		
 		txtNumero = new JTextField();
-		add(txtNumero, "10, 22, fill, fill");
+		add(txtNumero, "12, 22, fill, fill");
 		txtNumero.setColumns(10);
 		
 		txtComplemento = new JTextField();
-		add(txtComplemento, "14, 22, fill, fill");
+		add(txtComplemento, "16, 22, fill, fill");
 		txtComplemento.setColumns(10);
 		
 		lblBairro = new JLabel("Bairro");
-		add(lblBairro, "4, 24");
+		add(lblBairro, "4, 24, 3, 1");
 		
 		lblCidade = new JLabel("Cidade");
-		add(lblCidade, "10, 24");
+		add(lblCidade, "12, 24");
 		
 		lblEstado = new JLabel("Estado");
-		add(lblEstado, "14, 24");
+		add(lblEstado, "16, 24");
 		
 		txtBairro = new JTextField();
-		add(txtBairro, "4, 26, 3, 1, fill, fill");
+		add(txtBairro, "4, 26, 5, 1, fill, fill");
 		txtBairro.setEditable(false);
 		txtBairro.setColumns(10);
 		
 		txtCidade = new JTextField();
-		add(txtCidade, "10, 26, fill, fill");
+		add(txtCidade, "12, 26, fill, fill");
 		txtCidade.setEditable(false);
 		txtCidade.setColumns(10);
 		
 		txtEstado = new JTextField();
-		add(txtEstado, "14, 26, fill, fill");
+		add(txtEstado, "16, 26, fill, fill");
 		txtEstado.setEditable(false);
 		txtEstado.setColumns(10);
 		
 		lblObservaes = new JLabel("Observa\u00E7\u00F5es");
-		add(lblObservaes, "4, 30");
+		add(lblObservaes, "4, 30, 3, 1");
 		
 		txtObservacao = new JTextArea();
-		add(txtObservacao, "4, 32, 11, 1, fill, fill");
+		add(txtObservacao, "4, 32, 13, 1, fill, fill");
 		
 		btnSalvarAlteracao = new JButton("Salvar Altera\u00E7\u00F5es");
 		btnSalvarAlteracao.addActionListener(new ActionListener() {
@@ -208,8 +223,7 @@ public class ClienteAlterar extends JPanel {
 				
 				//SALVAR DADOS
 				ClienteController controllerCliente = new ClienteController();
-				
-				String mensagem = controllerCliente.cadastrarAlteracaoCliente(cliente.getId(), txtTelefone.getText(), txtNome.getText(), txtCep.getText(), txtLogradouro.getText(), txtNumero.getText(), txtComplemento.getText(), txtBairro.getText(), txtCidade.getText(), txtEstado.getText(), txtObservacao.getText() );
+				String mensagem = controllerCliente.cadastrarAlteracaoCliente(codigoPais ,cliente.getId(), txtTelefone.getText(), txtNome.getText(), txtCep.getText(), txtLogradouro.getText(), txtNumero.getText(), txtComplemento.getText(), txtBairro.getText(), txtCidade.getText(), txtEstado.getText(), txtObservacao.getText() );
 
 				JOptionPane.showMessageDialog(null, mensagem);
 				
@@ -221,13 +235,14 @@ public class ClienteAlterar extends JPanel {
 
 
 		});
-		add(btnSalvarAlteracao, "4, 36, 11, 1, default, fill");
+		add(btnSalvarAlteracao, "4, 36, 13, 1, default, fill");
 		
 		popularCampos(clienteSelecionado);
 
 	}
 	
 	private void popularCampos(ClienteVO clienteSelecionado) {
+		txtCodigoPais.setText(clienteSelecionado.getCodigo().getCodigo());
 		txtTelefone.setText(clienteSelecionado.getTelefone());
 		txtNome.setText(clienteSelecionado.getNome());
 		txtCep.setText(Integer.toString(clienteSelecionado.getCep()));
@@ -236,7 +251,12 @@ public class ClienteAlterar extends JPanel {
 		txtComplemento.setText(clienteSelecionado.getComplemento());
 		txtBairro.setText(clienteSelecionado.getBairro());
 		txtCidade.setText(clienteSelecionado.getCidade());
+		txtEstado.setText(clienteSelecionado.getEstado());
 		txtObservacao.setText(clienteSelecionado.getObservacao());
+		
+		cliente.setId(clienteSelecionado.getId());
+		
+		codigoPais = clienteSelecionado.getCodigo();
 	}
 
 	public void buscarCep(String cep) {

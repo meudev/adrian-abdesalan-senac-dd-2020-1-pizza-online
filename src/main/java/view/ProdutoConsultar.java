@@ -19,12 +19,17 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.awt.event.ActionEvent;
 
 public class ProdutoConsultar extends JPanel {
 	
 	TelaPrincipal telaPrincipal = new TelaPrincipal();
+	
+	Locale localeBR = new Locale("pt","BR");
+	NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
@@ -33,7 +38,7 @@ public class ProdutoConsultar extends JPanel {
 	private JButton btnEditarProduto;
 	private JButton btnExcluirProduto;
 	private ArrayList<ProdutoVO> produtos;
-	private String[] nomesColunas = { "NOME", "VALOR", "QUANTIDADE" };
+	private String[] nomesColunas = { "CATEGORIA", "NOME", "VALOR", "QUANTIDADE" };
 
 	public ProdutoConsultar() {
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -159,11 +164,15 @@ public class ProdutoConsultar extends JPanel {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 
 		for (ProdutoVO p : produtos) {
+			
+			String valor = Integer.toString(p.getValor());
+			String valorDecimal = "R$ "+ valor.substring(0, valor.length()-2) +","+ valor.substring(valor.length()-2, valor.length());
 
-			Object[] novaLinhaDaTabela = new Object[3];
-			novaLinhaDaTabela[0] = p.getNome();
-			novaLinhaDaTabela[1] = p.getValor();
-			novaLinhaDaTabela[2] = p.getQuantidade();
+			Object[] novaLinhaDaTabela = new Object[4];
+			novaLinhaDaTabela[0] = p.getIdCategoria().getDescricao();
+			novaLinhaDaTabela[1] = p.getNome();
+			novaLinhaDaTabela[2] = valorDecimal;
+			novaLinhaDaTabela[3] = p.getQuantidade();
 
 			model.addRow(novaLinhaDaTabela);
 		}

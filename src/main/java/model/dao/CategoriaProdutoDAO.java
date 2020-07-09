@@ -29,17 +29,6 @@ public class CategoriaProdutoDAO {
 		return categorias;
 	}
 
-	private static CategoriaProdutoVO construirCategoriaProdutoDoResultSet(ResultSet conjuntoResultante) {
-		CategoriaProdutoVO e = new CategoriaProdutoVO();
-		try {
-			e.setId(conjuntoResultante.getInt("id"));
-			e.setDescricao(conjuntoResultante.getString("descricao"));
-		} catch (SQLException ex) {
-			System.out.println(" Erro ao construir categoria produto a partir do ResultSet. Causa: " + ex.getMessage());
-		}
-		return e;
-	}
-
 	public CategoriaProdutoVO cadastrarCategoria(CategoriaProdutoVO novaCategoria) {
 		Connection conexao = Banco.getConnection();
 
@@ -49,7 +38,7 @@ public class CategoriaProdutoDAO {
 		
 		try {
 			
-			stmt.setString(1, novaCategoria.getDescricao());
+			stmt.setString(1, novaCategoria.getDescricao().toUpperCase());
 			stmt.execute();
 			
 			ResultSet resultado = stmt.getGeneratedKeys();
@@ -89,4 +78,33 @@ public class CategoriaProdutoDAO {
 		return categorias;
 	}
 
+	public CategoriaProdutoVO consultarCategoriaPorId(int idCategoriaProduto) {
+		String sql = " SELECT * FROM categoriaProduto WHERE id = ?";
+
+		Connection conexao = Banco.getConnection();
+		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
+		CategoriaProdutoVO categoriaProdutoConsultado = null;
+		try {
+			preparedStatement.setInt(1, idCategoriaProduto);
+			ResultSet conjuntoResultante = preparedStatement.executeQuery();
+
+			if (conjuntoResultante.next()) {
+				categoriaProdutoConsultado = construirCategoriaProdutoDoResultSet(conjuntoResultante);
+			}
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao consultar categoria produto. Id: " + idCategoriaProduto + " .Causa: " + ex.getMessage());
+		}
+		return categoriaProdutoConsultado;
+	}
+
+	private static CategoriaProdutoVO construirCategoriaProdutoDoResultSet(ResultSet conjuntoResultante) {
+		CategoriaProdutoVO e = new CategoriaProdutoVO();
+		try {
+			e.setId(conjuntoResultante.getInt("id"));
+			e.setDescricao(conjuntoResultante.getString("descricao"));
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao construir categoria produto a partir do ResultSet. Causa: " + ex.getMessage());
+		}
+		return e;
+	}
 }

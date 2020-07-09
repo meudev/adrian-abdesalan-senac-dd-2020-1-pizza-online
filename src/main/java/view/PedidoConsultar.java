@@ -145,12 +145,15 @@ public class PedidoConsultar extends JPanel {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		
 		for (PedidoVO p : pedidos) {
+			
+			String valor = Integer.toString(p.getValorTotal());
+			String valorDecimal = "R$ "+ valor.substring(0, valor.length()-2) +","+ valor.substring(valor.length()-2, valor.length());
 
 			Object[] novaLinhaDaTabela = new Object[5];
 			novaLinhaDaTabela[0] = p.getId();
 			novaLinhaDaTabela[1] = p.getDataPedido();
 			novaLinhaDaTabela[2] = p.getIdCliente().getNome();
-			novaLinhaDaTabela[3] = Integer.toString(p.getValorTotal()).substring(0,2)+","+Integer.toString(p.getValorTotal()).substring(2,Integer.toString(p.getValorTotal()).length());
+			novaLinhaDaTabela[3] = valorDecimal;
 			novaLinhaDaTabela[4] = p.getIdStatus().getDescricao();
 
 			model.addRow(novaLinhaDaTabela);

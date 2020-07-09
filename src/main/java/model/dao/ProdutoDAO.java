@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import model.vo.CategoriaProdutoVO;
 import model.vo.ProdutoVO;
 
 public class ProdutoDAO {
@@ -20,8 +21,8 @@ public class ProdutoDAO {
 		try {
 			
 			stmt.setInt(1, novoProduto.getIdCategoria().getId());
-			stmt.setString(2, novoProduto.getNome());
-			stmt.setString(3, novoProduto.getDescricao());
+			stmt.setString(2, novoProduto.getNome().toUpperCase());
+			stmt.setString(3, novoProduto.getDescricao().toUpperCase());
 			stmt.setInt(4, novoProduto.getQuantidade());
 			stmt.setInt(5, novoProduto.getValor());
 			stmt.setInt(6, novoProduto.isDisponivel() ? 1 : 0);
@@ -70,13 +71,16 @@ public class ProdutoDAO {
 		
 		try {
 			p.setId(rs.getInt("id"));
-			//categoria
-//			p.setIdCategoria(rs.getInt("idCategoria"));
 			p.setNome(rs.getString("nome"));
 			p.setDescricao(rs.getString("descricao"));
 			p.setQuantidade(rs.getInt("quantidade"));
 			p.setValor(rs.getInt("valor"));
-			p.setDisponivel(rs.getBoolean("disponivel"));			
+			p.setDisponivel(rs.getBoolean("disponivel"));
+			
+			//categoria
+			CategoriaProdutoDAO categoriaProdutoDAO = new CategoriaProdutoDAO();
+			CategoriaProdutoVO categoriaProduto = categoriaProdutoDAO.consultarCategoriaPorId(rs.getInt("idCategoria"));
+			p.setIdCategoria(categoriaProduto);	
 
 		} catch (SQLException e) {
 			

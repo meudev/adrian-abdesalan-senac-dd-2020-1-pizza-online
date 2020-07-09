@@ -12,8 +12,13 @@ public class ClienteBO {
 
 	public static String salvar(ClienteVO novoCliente) {
 		String mensagem = "";
+		String telefoneConsultado = novoCliente.getTelefone().replaceAll("[()-]", "");
+//		telefoneConsultado = telefoneConsultado.replace("(", "");
+//		telefoneConsultado = telefoneConsultado.replace(")", "");
+		telefoneConsultado = telefoneConsultado.replace(" ", "");
+//		telefoneConsultado = telefoneConsultado.replace("-", "");
 		
-		if(ClienteDAO.telefoneJaCadastrado(novoCliente.getTelefone())) {
+		if(ClienteDAO.telefoneJaCadastrado(telefoneConsultado)) {
 			
 			mensagem = "Telefone informado (" + novoCliente.getTelefone() + ") já foi utilizado";
 			
@@ -64,12 +69,6 @@ public class ClienteBO {
 	public static String salvarAlteracao(ClienteVO alterarCliente) {
 		String mensagem = "";
 		
-		if(ClienteDAO.telefoneJaCadastrado(alterarCliente.getTelefone())) {
-			
-			mensagem = "Telefone informado (" + alterarCliente.getTelefone() + ") já foi utilizado";
-			
-		} else {
-		
 			boolean alterado = dao.salvarAlteracao(alterarCliente);
 				
 			if(alterado) {
@@ -82,7 +81,6 @@ public class ClienteBO {
 				
 			}
 			
-		}
 		
 		return mensagem;
 	}

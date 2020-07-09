@@ -22,10 +22,14 @@ public class PedidoController {
 		
 		taxaEntrega = taxaEntrega.replace(".", "");
 		taxaEntrega = taxaEntrega.replace(",", "");
+		taxaEntrega = taxaEntrega.replace("R$", "");
+		taxaEntrega = taxaEntrega.substring(1, taxaEntrega.length());
 		int valorEntrega = Integer.parseInt(taxaEntrega);
 		
 		valorTotal = valorTotal.replace(".", "");
 		valorTotal = valorTotal.replace(",", "");
+		valorTotal = valorTotal.replace("R$", "");
+		valorTotal = valorTotal.substring(1, valorTotal.length());
 		int valorPedido = Integer.parseInt(valorTotal);
 		
 

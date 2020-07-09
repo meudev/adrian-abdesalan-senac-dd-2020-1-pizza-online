@@ -24,8 +24,8 @@ public class PedidoDAO {
 			stmt.setInt(1, novoPedido.getIdCliente().getId());
 			stmt.setString(2, novoPedido.getDataPedido());
 			stmt.setInt(3, novoPedido.getIdStatus().getId());
-			stmt.setString(4, novoPedido.getObservacao());
-			stmt.setString(5, novoPedido.getEndereco());
+			stmt.setString(4, novoPedido.getObservacao().toUpperCase());
+			stmt.setString(5, novoPedido.getEndereco().toUpperCase());
 			stmt.setInt(6, novoPedido.getTaxaEntrega());
 			stmt.setInt(7, novoPedido.getValorTotal());
 			stmt.execute();

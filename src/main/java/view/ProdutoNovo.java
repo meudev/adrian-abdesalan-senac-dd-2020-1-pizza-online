@@ -13,25 +13,28 @@ import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import java.awt.Font;
-import java.text.ParseException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
+
 import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class ProdutoNovo extends JPanel {
+	
+	Locale localeBR = new Locale("pt","BR");
+	NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
 
 	private static final long serialVersionUID = 1L;
 	private JComboBox<?> cbCategoria;
 	private JTextField txtNomeProduto;
 	private JTextArea txtDescricaoProduto;
-	private JFormattedTextField txtValor;
+	private JTextField txtValor;
 	private JTextField txtQuantidade;
 	private JCheckBox checkDisponivel;
 
@@ -86,17 +89,16 @@ public class ProdutoNovo extends JPanel {
 		JLabel lblDisponivel = new JLabel("Disponivel?");
 		add(lblDisponivel, "8, 16, 5, 1, fill, default");
 			
-		try {
-			
-			MaskFormatter mascaraValor = new MaskFormatter("##,##");
+		txtValor = new JTextField();
+		txtValor.addFocusListener(new java.awt.event.FocusAdapter() {
+			@Override
+			public void focusLost(java.awt.event.FocusEvent e) {
+				atualizarMascaraValor();
+			}
 
-			txtValor = new JFormattedTextField(mascaraValor);
-			add(txtValor, "4, 18, fill, fill");
-			txtValor.setColumns(10);
-			
-		} catch (ParseException ex) {
-		    ex.printStackTrace();
-		}
+		});
+		add(txtValor, "4, 18, fill, fill");
+		txtValor.setColumns(10);
 		
 		txtQuantidade = new JTextField();
 		add(txtQuantidade, "6, 18, default, fill");
@@ -123,6 +125,17 @@ public class ProdutoNovo extends JPanel {
 		});
 		add(btnCadastrarProduto, "4, 22, 9, 1, default, fill");
 
+	}
+	
+	private void atualizarMascaraValor() {
+		
+		if(txtValor.getText().isEmpty()) {
+			txtValor.setText(dinheiro.format(0.00));
+		} else {
+			double txtValorFormatado = Double.parseDouble(txtValor.getText().replace(",", "."));
+			txtValor.setText(dinheiro.format(txtValorFormatado));
+		}
+		
 	}
 	
 	private void limparCampos() {

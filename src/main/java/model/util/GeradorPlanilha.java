@@ -17,7 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class GeradorPlanilha {
 
 	public void gerarPlanilhaClientes(ArrayList<ClienteVO> clientes, String destinoArquivoNoDisco) {
-		String[] nomesColunas = {  "NOME", "TELEFONE", "BAIRRO", "CIDADE" };
+		String[] nomesColunas = { "NOME", "TELEFONE", "ENDEREÇO", "BAIRRO", "CIDADE" };
 
 		XSSFWorkbook planilha = new XSSFWorkbook();
 		XSSFSheet abaPlanilha = planilha.createSheet("Clientes");
@@ -35,9 +35,10 @@ public class GeradorPlanilha {
 			Row novaLinha = abaPlanilha.createRow(linhaAtual++);
 
 			novaLinha.createCell(0).setCellValue(clienteAtual.getNome());
-			novaLinha.createCell(1).setCellValue(clienteAtual.getTelefone());
-			novaLinha.createCell(2).setCellValue(clienteAtual.getBairro());
-			novaLinha.createCell(3).setCellValue(clienteAtual.getTelefone());
+			novaLinha.createCell(1).setCellValue(clienteAtual.getCodigo().getCodigo() +" "+ clienteAtual.getTelefone());
+			novaLinha.createCell(2).setCellValue(clienteAtual.getLogradouro() +", "+ clienteAtual.getNumero() +" - "+ clienteAtual.getComplemento());
+			novaLinha.createCell(3).setCellValue(clienteAtual.getBairro());
+			novaLinha.createCell(4).setCellValue(clienteAtual.getTelefone());
 		}
 
 		for (int i = 0; i < nomesColunas.length; i++) {

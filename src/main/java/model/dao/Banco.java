@@ -15,6 +15,13 @@ public class Banco {
 			+ "?useTimezone=true&serverTimezone=UTC&useSSL=false";
 	private static final String USER = "root";
 	private static final String PASSWORD = "";
+	
+//	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+//	private static final String BANCODADOS = "meudev44_dbpizza";
+//	private static final String CONEXAO = "jdbc:mysql://meudev.com.br:3306/" + BANCODADOS
+//			+ "?useTimezone=true&serverTimezone=UTC&useSSL=false";
+//	private static final String USER = "meudev44_cartao";
+//	private static final String PASSWORD = "poa102030";
 
 	public static final int CODIGO_RETORNO_ERRO_EXCLUSAO = 0;
 	public static final int CODIGO_RETORNO_SUCESSO_EXCLUSAO = 1;
