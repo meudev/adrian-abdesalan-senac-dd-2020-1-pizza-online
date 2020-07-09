@@ -4,8 +4,17 @@ create database dbpizza;
 
 use dbpizza;
 
+create table codigoPais (
+	id int not null auto_increment,
+	codigo varchar(5) not null,
+	pais varchar(50) not null,
+
+	primary key(id)
+);
+
 create table cliente (
 	id int not null auto_increment,
+	idCodigo int not null,
 	telefone varchar(11) not null,
 	nome varchar(100) not null,
 	cep int,
@@ -91,9 +100,20 @@ create table usuario (
 insert usuario values (null, "Administrador", "", "admin", "21232f297a57a5a743894a0e4a801fc3");
 
 /* NÃO REMOVER OU EDITAR AS PROXIMAS LINHAS */
-insert statusPedido values (null, "Realizado");
-insert statusPedido values (null, "Cancelado");
-insert statusPedido values (null, "Em Produção");
-insert statusPedido values (null, "Pronto");
-insert statusPedido values (null, "Saiu para Entrega");
-insert statusPedido values (null, "Entregue");
+insert statusPedido values (null, "REALIZADO");
+insert statusPedido values (null, "CANCELADO");
+insert statusPedido values (null, "EM PRODUÇÃO");
+insert statusPedido values (null, "PRONTO");
+insert statusPedido values (null, "SAIU PARA ENTREGA");
+insert statusPedido values (null, "ENTREGUE");
+
+/* NÃO REMOVER OU EDITAR AS PROXIMAS LINHAS */
+insert codigoPais values (null, "+55", "BRASIL");
+insert codigoPais values (null, "+49", "ALEMANHA");
+insert codigoPais values (null, "+966", "ARÁBIA SAUDITA");
+insert codigoPais values (null, "+54", "ARGENTINA");
+insert codigoPais values (null, "+61", "AUSTRÁLIA");
+insert codigoPais values (null, "+591", "BOLIVIA");
+insert codigoPais values (null, "+1", "CANADÁ");
+insert codigoPais values (null, "+56", "CHILE");
+insert codigoPais values (null, "+57", "COLÔMBIA");
